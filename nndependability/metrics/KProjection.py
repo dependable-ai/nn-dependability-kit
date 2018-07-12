@@ -20,7 +20,7 @@ class Neuron_OnOff_KProjection_Metric():
         elif kValue == 2:
             for neuronIndexI in range(numberOfNeuronsToTrack):
                 for neuronIndexJ in range(neuronIndexI+1, numberOfNeuronsToTrack):
-                    self.k_Activation_record["N" + str(neuronIndexI) + "N"+ str(neuronIndexJ)] = set()
+                    self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)] = set()
         else:
             print("Currently not supported")
 
@@ -35,45 +35,49 @@ class Neuron_OnOff_KProjection_Metric():
         print(str(self.kValue)+"-projection neuron on-off activation coverage:"+str(numerator) + "/"+str(int(denominator))+"="+str(numerator/denominator))
     
     
-    def addInputs(self, neuronValues):
+    def addInputs(self, neuronValuesNp):
         """ Process neuron values, and store the number of visited k-activation patterns.
              
             Keyword arguments:
             
         """
         
+        if (not (type(neuronValuesNp) == np.ndarray)):
+            raise TypeError('Input should be numpy array')
+        
         mat = np.zeros(self.numberOfNeuronsToTrack)
-        ivabs = np.greater(neuronValues, mat)
+        ivabs = np.greater(neuronValuesNp, mat)
 
         if self.kValue == 1:
-            for exampleIndex in range(neuronValues.shape[0]):                
+            for exampleIndex in range(neuronValuesNp.shape[0]):                
                 constraint = ''
                 for neuronIndexI in range(self.numberOfNeuronsToTrack) :               
                         if (ivabs[exampleIndex,neuronIndexI] >0 ) :   
-                            self.k_Activation_record["N" + str(neuronIndexI) ].add(1)                     
+                            self.k_Activation_record["N" + str(neuronIndexI) ].add("1")                     
                         else:
-                            self.k_Activation_record["N" + str(neuronIndexI) ].add(0) 
+                            self.k_Activation_record["N" + str(neuronIndexI) ].add("0") 
         elif self.kValue == 2: 
-            for exampleIndex in range(neuronValues.shape[0]):                
+            for exampleIndex in range(neuronValuesNp.shape[0]):                
                 constraint = ''
                 for neuronIndexI in range(self.numberOfNeuronsToTrack) :
-                    for neuronIndexJ in range(neuronIndexI+1, self.numberOfNeuronsToTrack):
-                        if (ivabs[exampleIndex,neuronIndexI] >0 and ivabs[exampleIndex,neuronIndexJ]  >0) :                        
-                            # self.k_Activation_record["N" + str(neuronIndexI) + "N"+ str(neuronIndexJ)].add("TT")
-                            self.k_Activation_record["N" + str(neuronIndexI) + "N"+ str(neuronIndexJ)].add(3)
-                        elif (ivabs[exampleIndex,neuronIndexI] >0):
-                            # self.k_Activation_record["N" + str(neuronIndexI) + "N"+ str(neuronIndexJ)].add("TF")
-                            self.k_Activation_record["N" + str(neuronIndexI) + "N"+ str(neuronIndexJ)].add(2)
-                        elif (ivabs[exampleIndex,neuronIndexJ] >0):
-                            # self.k_Activation_record["N" + str(neuronIndexI) + "N"+ str(neuronIndexJ)].add("FT")
-                            self.k_Activation_record["N" + str(neuronIndexI) + "N"+ str(neuronIndexJ)].add(1)
-                        else:
-                            # self.k_Activation_record["N" + str(neuronIndexI) + "N"+ str(neuronIndexJ)].add("FF")
-                            self.k_Activation_record["N" + str(neuronIndexI) + "N"+ str(neuronIndexJ)].add(0)        
+                    if (ivabs[exampleIndex,neuronIndexI] >0):
+                        for neuronIndexJ in range(neuronIndexI+1, self.numberOfNeuronsToTrack):
+                            if(ivabs[exampleIndex,neuronIndexJ]  >0) : 
+                                self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)].add("11")
+                            else:
+                                self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)].add("10")
+                    else : 
+                        for neuronIndexJ in range(neuronIndexI+1, self.numberOfNeuronsToTrack):
+                            if(ivabs[exampleIndex,neuronIndexJ]  >0) : 
+                                self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)].add("01")
+                            else:    
+                                self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)].add("00")           
         else:
             print("Currently not supported")
 
-        
+
+    def dumpMetricState():
+        return self.k_Activation_record, self.kValue, self.numberOfNeuronsToTrack
 
         
        
