@@ -11,7 +11,7 @@ def generateTestCase (img, targetedNeuronIndex, desiredNAP, model):
     Keyword arguments:
     img -- an image to be perturbed towards the desired activation pattern
     targetedNeuronIndex  --  Indices of neuron with the goal of satisfying the pattern
-    desiredNAP -- desired shape (>0 is set to 10; <= 0 is set to -10)
+    desiredNAP -- desired shape (>0 is set to 1; <= 0 is set to -1)
     model -- neural network under analysis
     """
     
@@ -62,8 +62,9 @@ def generateTestCase (img, targetedNeuronIndex, desiredNAP, model):
                     
         result = x.data - (alpha * x.grad.data)
         # TODO: Here we are not clamping the input
-        # result = torch.clamp(result, 0.0, 1.0)
-        x.data = x.data - (alpha * x.grad.data)        
+        result = torch.clamp(result, 0.0, 1.0)
+        x.data = result
+        # x.data = x.data - (alpha * x.grad.data)        
         
         if(step % 500 == 0):
             print(str(step)+": "+str(intermediate.detach().numpy().squeeze(0)[targetedNeuronIndex[0]]) + ", "+ str(intermediate.detach().numpy().squeeze(0)[targetedNeuronIndex[1]]))
