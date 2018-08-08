@@ -141,6 +141,7 @@ class TestCaseGenConstraint():
         
     
     
+
 class Expression():
     
     def __init__(self):
@@ -158,4 +159,4 @@ class Expression():
             else:
                 print(" "+ str(self.coefficients[i]) + " "+ str(self.variables[i]), end='')
         print(" <= " + str(self.upperbound))
-        
+                

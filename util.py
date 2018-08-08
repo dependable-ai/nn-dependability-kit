@@ -75,4 +75,51 @@ def iterative_FGSM_attack (img, label, model):
         x.data = result        
         
     return result.cpu(), adv.cpu(), False
+
+
+def iterative_targeted_FGSM_attack (img, label, anotherLabel, model):    
     
+    eps = 5 * 8 / 225. 
+    steps = 100
+    norm = float('inf')
+    step_alpha = 0.05 
+    loss = nn.CrossEntropyLoss()
+    
+    x, y = Variable(img, requires_grad=True), Variable(anotherLabel)
+    result = img
+    adv = torch.zeros(result.shape)
+    for step in range(steps):
+        zero_gradients(x)
+        out = model(x)         
+        # Returns the maximum value of each row of the input tensor in the given dimension dim
+        _ , y.data = torch.max(out.data, 1)
+        if (step == 1 and y.data == anotherLabel):
+            # It an image directly to the perturbed class. Do nothing
+            result.cpu(), adv.cpu(), False
+        
+        if (y.data == anotherLabel and step > 1) :
+            return result.cpu(), adv.cpu(), True
+            # print("perturbed input for "+ str(label[0])+  " is now identified to be: "+ str(y.data[0]))
+            
+        _loss = loss(out, y)
+        _loss.backward()
+        normed_grad = step_alpha * torch.sign(x.grad.data)
+        step_adv = x.data + normed_grad
+        adv = step_adv - img
+        adv = torch.clamp(adv, -eps, eps)
+        result = img + adv
+        # torch.clamp(input, min, max, out=None) → Tensor
+        # Clamp all elements in input into the range [min, max] and return a resulting Tensor.
+        result = torch.clamp(result, 0.0, 1.0)
+        x.data = result        
+        
+    return result.cpu(), adv.cpu(), False
+    
+
+import numpy as np 
+from ortools.linear_solver import pywraplp
+
+
+  
+    
+        
