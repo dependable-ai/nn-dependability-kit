@@ -76,6 +76,6 @@ def deriveReLuOutputDifferenceBound(isMaxBound, layerIndex, weights, bias, numbe
     # Solve the problem using the default solver (CBC)
     prob.solve()
     # Here we would like to allow timeout in the solver, such that the solver only performs a fixed amount for it can found at best
-    # prob.solve(COIN_CMD(maxSeconds=2))
+    # prob.solve(PULP_CBC_CMD(maxSeconds=2))
 
     return value(prob.objective)

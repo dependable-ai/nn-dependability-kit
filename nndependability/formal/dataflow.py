@@ -25,14 +25,18 @@ def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInput
     c = LpAffineExpression(equalityConstraint)
     prob += c == -1*bias, "eq"
     
-    for constraint in octagonBound:
-        boundConstraint = []
-        boundConstraint.append((variableDict[constraint[1]], 1))
-        boundConstraint.append((variableDict[constraint[2]], -1))
-        c = LpAffineExpression(boundConstraint)
-        prob += c >= constraint[0]
-        prob += c <= constraint[3]
-    
+    for constraint in octagonBound:    
+        try:
+            boundConstraint = []
+            boundConstraint.append((variableDict[constraint[1]], 1))
+            boundConstraint.append((variableDict[constraint[2]], -1))
+            c = LpAffineExpression(boundConstraint)
+            prob += c >= constraint[0]
+            prob += c <= constraint[3]
+        except:
+            # print(octagonBound)
+            print("", end='')
+        
     # Objective
     prob += variableDict["v_"+str(layerIndex)+"_"+str(nout)], "obj"
     
