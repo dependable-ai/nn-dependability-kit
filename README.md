@@ -19,6 +19,7 @@ There are four packages under nndependability, namely
 - PyTorch + Numpy 
 - [Test case generation] Google optimization research tools (https://developers.google.com/optimization/introduction/installing/binary)
 - [Run-time monitoring] dd (binary decision diagram implemented using python)
+- [Verification] pulp (python-based MILP connector to CBC and other solvers)
 
 ## Contact
 

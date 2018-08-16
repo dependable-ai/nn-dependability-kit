@@ -3,11 +3,14 @@ import matplotlib.pyplot as plt
 
 import torch
 import torch.nn as nn
-#import torchvision
-#import torchvision.transforms as transforms
 from torch.autograd  import Variable
 from torch.autograd.gradcheck import zero_gradients
 from torch.utils.data import Dataset, DataLoader
+
+import matplotlib.patches as patches
+from PIL import Image
+
+
 
 def displayMNIST (img):
     ''' Display MNIST image where pixels are without value 0-1
@@ -116,10 +119,22 @@ def iterative_targeted_FGSM_attack (img, label, anotherLabel, model):
     return result.cpu(), adv.cpu(), False
     
 
-import numpy as np 
-from ortools.linear_solver import pywraplp
 
+def drawFrontCar(imgFile, boundingBox):
+    im = np.array(Image.open(imgFile), dtype=np.uint8)
 
-  
+    # Create figure and axes
+    fig,ax = plt.subplots(1)
+
+    # Display the image
+    ax.imshow(im)
+
+    # Create a Rectangle patch
+    rect = patches.Rectangle((int(boundingBox[0]-boundingBox[2]/2),int(boundingBox[1]-boundingBox[3]/2)),int(boundingBox[2]),int(boundingBox[3]),linewidth=1,edgecolor='r',facecolor='none')
+
+    # Add the patch to the Axes
+    ax.add_patch(rect)
+
+    plt.show()
+
     
-        

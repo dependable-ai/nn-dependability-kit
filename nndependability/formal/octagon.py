@@ -1,7 +1,7 @@
 # Import PuLP modeler functions
 from pulp import *
 
-def deriveReLuOutputDifferenceBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout1, nout2, bigM, minBound, maxBound, octagonBound, seconds = 5):
+def deriveReLuOutputDifferenceBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout1, nout2, bigM, minBound, maxBound, octagonBound, inputConstraints = [], seconds = 5):
     '''
 
     '''
@@ -67,7 +67,27 @@ def deriveReLuOutputDifferenceBound(isMaxBound, layerIndex, weights, bias, numbe
         c = LpAffineExpression(boundConstraint)
         prob += c >= constraint[0]
         prob += c <= constraint[3]
-    
+
+    for inputConstr in inputConstraints:  
+        try:
+            boundConstraint = []
+            for i in range(int(len(inputConstr)/2) - 1):
+                boundConstraint.append((variableDict[inputConstr[2*(i+1)+1].replace("in", "v_0_")], inputConstr[2*(i+1)]))
+            c = LpAffineExpression(boundConstraint)
+            # Here be careful - if the sign is "<=" then one shall place ">="
+            if inputConstr[1] == "<=":
+                prob += c <= inputConstr[0]
+            elif inputConstr[1] == "==":
+                prob += c == inputConstr[0]
+            elif inputConstr[1] == ">=":
+                prob += c >= inputConstr[0]
+            else:
+                raise ValueError('Operators shall be <=, == or >=')
+                
+            #print(c)
+        except:
+            print("Problem is processing input constraint: "+ str(inputConstr))
+            #print("", end='')     
     
     # Objective
     prob += variableDict["v_"+str(layerIndex)+"_"+str(nout1)] - variableDict["v_"+str(layerIndex)+"_"+str(nout2)], "obj"
