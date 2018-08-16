@@ -51,19 +51,19 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
                 firstLayer = False
                 # Add additional input constraints to derive the bound
                 for i in range(numberOfOutputs):
-                    minBound[layerIndex][i] = dataflow.deriveReLuOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, bigM, i, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints)
-                    maxBound[layerIndex][i] = dataflow.deriveReLuOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, bigM, i, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints)        
+                    minBound[layerIndex][i] = dataflow.deriveReLuOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints)
+                    maxBound[layerIndex][i] = dataflow.deriveReLuOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints)        
                     
             elif(name.startswith(lastLayerName)):  
                 # Output layer
                 if len(riskProperty) == 0:
                     # Compute output bounds
                     for i in range(numberOfOutputs):
-                        minBound[layerIndex][i] = dataflow.deriveLinearOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, bigM, i, minBound[layerIndex -1], maxBound[layerIndex -1])
-                        maxBound[layerIndex][i] = dataflow.deriveLinearOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, bigM, i, minBound[layerIndex -1], maxBound[layerIndex -1])        
+                        minBound[layerIndex][i] = dataflow.deriveLinearOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1])
+                        maxBound[layerIndex][i] = dataflow.deriveLinearOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1])        
                 else:
                     # Check if the property can be violated
-                    isRiskReachable = dataflow.isRiskPropertyReachable(True, layerIndex, weights, bias, numberOfInputs, numberOfOutputs, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], [], riskProperty)        
+                    isRiskReachable = dataflow.isRiskPropertyReachable(True, layerIndex, weights, bias, numberOfInputs, numberOfOutputs, minBound[layerIndex -1], maxBound[layerIndex -1], [], riskProperty)        
                     if(isRiskReachable == False):
                         print("Risk property is not reachable (using boxed abstraction)")
                         return [], []
@@ -71,8 +71,8 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
             else:  
                 # Intermediate layer                
                 for i in range(numberOfOutputs):
-                    minBound[layerIndex][i] = dataflow.deriveReLuOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, bigM, i, minBound[layerIndex -1], maxBound[layerIndex -1])
-                    maxBound[layerIndex][i] = dataflow.deriveReLuOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, bigM, i, minBound[layerIndex -1], maxBound[layerIndex -1])        
+                    minBound[layerIndex][i] = dataflow.deriveReLuOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1])
+                    maxBound[layerIndex][i] = dataflow.deriveReLuOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1])        
 
             layerIndex = layerIndex + 1                        
 
@@ -163,12 +163,12 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
                     # Perform bound analysis over the final layer. 
                     for i in range(numberOfOutputs):
                         print (str(layerIndex) + "  "+str(i))
-                        minBoundOctagon[i] = dataflow.deriveLinearOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, bigM, i, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1])
-                        maxBoundOctagon[i] = dataflow.deriveLinearOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, bigM, i, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1])        
+                        minBoundOctagon[i] = dataflow.deriveLinearOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1])
+                        maxBoundOctagon[i] = dataflow.deriveLinearOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1])        
                     return minBoundOctagon, maxBoundOctagon
                 else:
                     # Check if the property can be violated
-                    isRiskReachable = dataflow.isRiskPropertyReachable(True, layerIndex, weights, bias, numberOfInputs, numberOfOutputs, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], riskProperty)        
+                    isRiskReachable = dataflow.isRiskPropertyReachable(True, layerIndex, weights, bias, numberOfInputs, numberOfOutputs, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], riskProperty)        
                     if(isRiskReachable == False):
                         print("Risk property is not reachable (using octagon abstraction)")
                         return [], []    

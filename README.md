@@ -6,6 +6,10 @@ nn-dependability kit is a research prototype to assist engineering neural networ
 
 GNU Affero General Public License (AGPL) Version 3
 
+## Trying the tool
+
+Examples are presented as jupyter notebooks to allow step-by-step understanding. 
+
 ## Structure
 
 There are four packages under nndependability, namely
@@ -16,11 +20,14 @@ There are four packages under nndependability, namely
 
 ## Important python packages as requirements
 
-- PyTorch + Numpy 
+- PyTorch 4.0 + Numpy + matplotlib 
 - [Test case generation] Google optimization research tools (https://developers.google.com/optimization/introduction/installing/binary)
+- [Verification / static analysis] pulp (python-based MILP connector to CBC and other solvers)
 - [Run-time monitoring] dd (binary decision diagram implemented using python)
-- [Verification] pulp (python-based MILP connector to CBC and other solvers)
 
-## Contact
+# Related publications
 
+- [Metrics & Test case generation] https://arxiv.org/abs/1806.02338
+- [Static analysis & formal verification] https://arxiv.org/abs/1705.01040 
+- [Runtime verification] 
 

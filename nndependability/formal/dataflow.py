@@ -4,7 +4,7 @@ import numpy as np
 
 
 
-def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, bigM, minBound, maxBound, octagonBound = []):
+def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, minBound, maxBound, octagonBound = []):
     if layerIndex < 1:
         raise Error("layer index shall be smaller than X")
 
@@ -44,12 +44,15 @@ def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInput
     # Objective
     prob += variableDict["v_"+str(layerIndex)+"_"+str(nout)], "obj"
     
+    if nout == 0:
+        prob.writeLP("bound_nout_"+str(layerIndex)+"_"+str(nout)+".lp")    
+
     # Solve the problem using the default solver (CBC)
     prob.solve()
 
     return value(prob.objective)
 
-def isRiskPropertyReachable(isMaxBound, layerIndex, weights, bias, numberOfInputs, numberOfOutputs, bigM, minBound, maxBound, octagonBound = [], riskProperty = []):
+def isRiskPropertyReachable(isMaxBound, layerIndex, weights, bias, numberOfInputs, numberOfOutputs, minBound, maxBound, octagonBound = [], riskProperty = []):
     if layerIndex < 1:
         raise Error("layer index shall be smaller than X")
     if len(riskProperty) == 0:
@@ -114,11 +117,15 @@ def isRiskPropertyReachable(isMaxBound, layerIndex, weights, bias, numberOfInput
     # prob += variableDict["v_"+str(layerIndex)+"_"+str(0)], "obj"
     
     # Debug purpose
-    #prob.writeLP("test.lp")
-    
+    if len(octagonBound) == 0:
+        prob.writeLP("propertyBoxedAbstraction.lp")
+    else:
+        prob.writeLP("propertyOctagonAbstraction.lp")
+        
     # Solve the problem using the default solver (CBC)
     prob.solve()
 
+    
     # Print the status of the solved LP
     print("==============================")
     #print("#LpStatusOptimal	“Optimal”	1")
@@ -196,8 +203,10 @@ def deriveReLuOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs,
     
     # Objective
     prob += variableDict["v_"+str(layerIndex)+"_"+str(nout)], "obj"
-    
 
+    if nout == 0:
+        prob.writeLP("bound_nout_"+str(layerIndex)+"_"+str(nout)+".lp")       
+    
     # Solve the problem using the default solver (CBC)
     prob.solve()
 
