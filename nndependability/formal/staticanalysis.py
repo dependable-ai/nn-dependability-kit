@@ -3,8 +3,9 @@ from . import octagon
 
 
 import numpy as np
+import math
 
-def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraints = [], riskProperty = [], bigM = 1000000.0 ):
+def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraints = [], riskProperty = [], isAvoidQuadraticConstraints = False, bigM = 1000000.0):
     
     lastLayerName = None
     # Derive the name of the last layer
@@ -119,22 +120,52 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
                     # For the first layer, the input constraint is taken from parameters
                     inputConstraintForThisLayer = inputConstraints
                     
-                
-                for i in range(numberOfOutputs):
-                    print("\t["+str(i)+"]: ", end='')
-                    for j in range(numberOfOutputs):
-                        if (j>i):
-                            if(j%5==0):
-                                print(str(j)+"," , end='')
-                            octagonconstraint = []
+                if isAvoidQuadraticConstraints == False:
+                    for i in range(numberOfOutputs):
+                        print("\t["+str(i)+"]: ", end='')
+                        for j in range(numberOfOutputs):
+                            if (j>i):
+                                if(j%5==0):
+                                    print(str(j)+"," , end='')
+                                octagonconstraint = []
 
-                            minimumValue = octagon.deriveReLuOutputDifferenceBound(False, layerIndex, weights, bias, numberOfInputs, i, j, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], inputConstraintForThisLayer)
-                            maximumValue = octagon.deriveReLuOutputDifferenceBound(True, layerIndex, weights, bias, numberOfInputs, i, j, bigM,  minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], inputConstraintForThisLayer)        
-                            vari = "v_"+str(layerIndex)+"_"+str(i)
-                            varj = "v_"+str(layerIndex)+"_"+str(j)
-                            octagonconstraint = [minimumValue, vari, varj, maximumValue]
-                            octagonBound[layerIndex].append(octagonconstraint)
-                    print()
+                                minimumValue = octagon.deriveReLuOutputDifferenceBound(False, layerIndex, weights, bias, numberOfInputs, i, j, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], inputConstraintForThisLayer)
+                                maximumValue = octagon.deriveReLuOutputDifferenceBound(True, layerIndex, weights, bias, numberOfInputs, i, j, bigM,  minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], inputConstraintForThisLayer)        
+                                vari = "v_"+str(layerIndex)+"_"+str(i)
+                                varj = "v_"+str(layerIndex)+"_"+str(j)
+                                octagonconstraint = [minimumValue, vari, varj, maximumValue]
+                                octagonBound[layerIndex].append(octagonconstraint)
+                        print()                
+                else:
+                    # Only create octagon constraints linear to the size of the neuron
+                    # (i, i+1)
+                    print("  (constraint shape - x_{i} - x_{i+1}: ", end='')
+                    for i in (range(numberOfOutputs  -1)):  
+                        if(i%5==0):
+                            print(str(i)+"," , end='')
+                        octagonconstraint = []
+                        minimumValue = octagon.deriveReLuOutputDifferenceBound(False, layerIndex, weights, bias, numberOfInputs, i, i+1, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], inputConstraintForThisLayer)
+                        maximumValue = octagon.deriveReLuOutputDifferenceBound(True, layerIndex, weights, bias, numberOfInputs, i, i+1, bigM,  minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], inputConstraintForThisLayer)        
+                        vari = "v_"+str(layerIndex)+"_"+str(i)
+                        varj = "v_"+str(layerIndex)+"_"+str(i+1)
+                        octagonconstraint = [minimumValue, vari, varj, maximumValue]
+                        octagonBound[layerIndex].append(octagonconstraint)
+                    print()  
+                    # (i, i+ N/2)  
+                    print("  (constraint shape - x_{i} - x_{i+(N/2)}: ", end='')                    
+                    half = (int(math.ceil(numberOfOutputs)/2))
+                    for i in range(half):   
+                        if(i%5==0):
+                            print(str(i)+"," , end='')                     
+                        octagonconstraint = []
+                        minimumValue = octagon.deriveReLuOutputDifferenceBound(False, layerIndex, weights, bias, numberOfInputs, i, i+half, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], inputConstraintForThisLayer)
+                        maximumValue = octagon.deriveReLuOutputDifferenceBound(True, layerIndex, weights, bias, numberOfInputs, i, i+half, bigM,  minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], inputConstraintForThisLayer)        
+                        vari = "v_"+str(layerIndex)+"_"+str(i)
+                        varj = "v_"+str(layerIndex)+"_"+str(i+half)
+                        octagonconstraint = [minimumValue, vari, varj, maximumValue]
+                        octagonBound[layerIndex].append(octagonconstraint)
+                    print()  
+                        
             print("Layer "+str(layerIndex) +": completed")
             print()
             layerIndex = layerIndex + 1        
