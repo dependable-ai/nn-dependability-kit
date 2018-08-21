@@ -11,7 +11,8 @@ GNU Affero General Public License (AGPL) Version 3
 Examples are presented as jupyter notebooks to allow step-by-step understanding. 
 
 - [Formal verification] TargetVehicleProcessingNetwork_FormalVerification.ipynb
-- [Test case generation] GTSRB_Pytorch_Neuron2ProjectionCoverage_TestGen.ipynb  
+- [Metrics & test case generation] GTSRB_Neuron2ProjectionCoverage_TestGen.ipynb, or MNIST_Neuron2ProjectionCoverage_TestGen.ipynb  
+- [Runtime verification] GTSRB_RuntimeVerification.ipynb, or MNIST_RuntimeVerification.ipynb  
 
 ## Structure
 
@@ -26,11 +27,11 @@ There are four packages under nndependability, namely
 - PyTorch 4.0 + Numpy + matplotlib + jupyter
 - [Test case generation] Google optimization research tools (https://developers.google.com/optimization/introduction/installing/binary)
 - [Verification / static analysis] pulp (python-based MILP connector to CBC and other solvers)
-- [Run-time monitoring] dd (binary decision diagram implemented using python)
+- [Run-time verification] dd (binary decision diagram implemented using python)
 
 # Related publications
 
 - [Metrics & test case generation] https://arxiv.org/abs/1806.02338
 - [Static analysis & formal verification] https://arxiv.org/abs/1705.01040 
-- [Runtime verification] 
+- [Runtime verification] To be available on ArXiv soon
 

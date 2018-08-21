@@ -1,11 +1,24 @@
 from . import dataflow
 from . import octagon
 
-
 import numpy as np
 import math
 
 def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraints = [], riskProperty = [], isAvoidQuadraticConstraints = False, bigM = 1000000.0):
+    """Check if the risk property is not reachable for the neural network, or (if no risk property is provided) derive the min and max output bound for a network.
+
+    This function takes a network and applies dataflow analysis (boxed domain, octagon domain) to consecutively compute the bound of each neuron.
+    Finally, if risk property is provided, it checks if the computed bound implies the risk property. The computation is done by formulating 
+    the bound computation as a MILP problem. 
+    
+    Keyword arguments:
+    inputMinBound -- array of input lower bounds
+    inputMaxBound -- array of input upper bounds
+    net -- neural network description 
+    isUsingBox -- true if apply only boxed abstraction; false if also apply octagon abstraction
+    isAvoidQuadraticConstraints -- for octagon abstraction, whether to avoid generating full octagon constraints (quadratic to the number of neurons)
+    """
+
     
     lastLayerName = None
     # Derive the name of the last layer
@@ -21,7 +34,7 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
     minBound[0] = inputMinBound
     maxBound[0] = inputMaxBound
 
-    # Select an M value that is just large - internally the solver does mixed-integer-linear-programming to derive a smaller big-M value
+    # Select an M value that is just large enough - internally the solver does mixed-integer-linear-programming to derive a smaller big-M value
 
     layerIndex = 1
     firstLayer = True
@@ -64,7 +77,7 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
                         maxBound[layerIndex][i] = dataflow.deriveLinearOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1])        
                 else:
                     # Check if the property can be violated
-                    isRiskReachable = dataflow.isRiskPropertyReachable(True, layerIndex, weights, bias, numberOfInputs, numberOfOutputs, minBound[layerIndex -1], maxBound[layerIndex -1], [], riskProperty)        
+                    isRiskReachable = dataflow.isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfOutputs, minBound[layerIndex -1], maxBound[layerIndex -1], [], riskProperty)        
                     if(isRiskReachable == False):
                         print("Risk property is not reachable (using boxed abstraction)")
                         return [], []
@@ -199,7 +212,7 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
                     return minBoundOctagon, maxBoundOctagon
                 else:
                     # Check if the property can be violated
-                    isRiskReachable = dataflow.isRiskPropertyReachable(True, layerIndex, weights, bias, numberOfInputs, numberOfOutputs, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], riskProperty)        
+                    isRiskReachable = dataflow.isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfOutputs, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], riskProperty)        
                     if(isRiskReachable == False):
                         print("Risk property is not reachable (using octagon abstraction)")
                         return [], []    

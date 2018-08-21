@@ -5,6 +5,16 @@ import numpy as np
 
 
 def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, minBound, maxBound, octagonBound = []):
+    """Derive the min or max output of a neuron using boxed domain and MILP, where the neuron is a linear function.
+
+    Keyword arguments:
+    isMaxBound -- derive max bound
+    layerIndex -- indexing of the layer in the overall network (for debugging purposes)
+    minBound -- array of input lower bounds
+    maxBound -- array of input upper bounds
+    octagonBound -- array of input constraints, with each specified with a shape of L_i <= in_i - in_j <= U_i 
+    """
+
     if layerIndex < 1:
         raise Error("layer index shall be smaller than X")
 
@@ -52,7 +62,17 @@ def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInput
 
     return value(prob.objective)
 
-def isRiskPropertyReachable(isMaxBound, layerIndex, weights, bias, numberOfInputs, numberOfOutputs, minBound, maxBound, octagonBound = [], riskProperty = []):
+def isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfOutputs, minBound, maxBound, octagonBound = [], riskProperty = []):
+    """Compute if a certain risk property associated with a certain neuron layer is reachable.
+
+    Keyword arguments:
+    layerIndex -- indexing of the layer in the overall network (for debugging purposes)
+    minBound -- array of input lower bounds
+    maxBound -- array of input upper bounds
+    octagonBound -- array of input constraints, with each specified with a shape of L_i <= in_i - in_j <= U_i 
+    riskProperty -- array of linear constraints related to output value of the layer
+    """
+
     if layerIndex < 1:
         raise Error("layer index shall be smaller than X")
     if len(riskProperty) == 0:
@@ -60,11 +80,8 @@ def isRiskPropertyReachable(isMaxBound, layerIndex, weights, bias, numberOfInput
     
         
     # A new LP problem
-    prob = None
-    if isMaxBound: 
-        prob = LpProblem("test1", LpMaximize)    
-    else:
-        prob = LpProblem("test1", LpMinimize)                
+    prob = LpProblem("test1", LpMaximize)    
+              
         
     variableDict = dict()  
     for nout in range(numberOfOutputs):
@@ -142,10 +159,18 @@ def isRiskPropertyReachable(isMaxBound, layerIndex, weights, bias, numberOfInput
 
     
 def deriveReLuOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, bigM, minBound, maxBound, inputConstraints = []):
-    '''
-    Apply dataflow analysis (i.e., abstract interpretation with boxed domain) to derive the bound of an output neuron, where MILP is called internally.  
+    """Derive the min or max output of a neuron using boxed domain and MILP, where the neuron is a ReLU function.
+
+    This is based on a partial re-implementation of the ATVA'17 paper https://arxiv.org/pdf/1705.01040.pdf.
+    See Proposition 1 for the MILP encoding, and using MILP to derive bounds is essentially the heuristic 1 in the paper. 
     
-    '''
+    Keyword arguments:
+    isMaxBound -- derive max bound
+    layerIndex -- indexing of the layer in the overall network (for debugging purposes)
+    minBound -- array of input lower bounds
+    maxBound -- array of input upper bounds
+    octagonBound -- array of input constraints, with each specified with a shape of L_i <= in_i - in_j <= U_i 
+    """
     
     if layerIndex < 1:
         raise Error("layer index shall be smaller than X")
@@ -179,7 +204,11 @@ def deriveReLuOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs,
     prob += variableDict["v_"+str(layerIndex)+"_"+str(nout)] -variableDict["im_"+str(layerIndex)+"_"+str(nout)] + bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout)] <= bigM, "c2"
     # c3: v <= bM <=>  M(b) - V >= 0
     prob += bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout)] - variableDict["v_"+str(layerIndex)+"_"+str(nout)] >= 0, "c3"
-
+    # c4: im + (1-b) M >= 0 <=> im - M(b) >= -M
+    prob += variableDict["im_"+str(layerIndex)+"_"+str(nout)] - bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout)] >= -1*bigM, "c4"    
+    # c5: im  - b M <= 0 
+    prob += variableDict["im_"+str(layerIndex)+"_"+str(nout)] - bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout)] <= 0, "c5" 
+    
     for inputConstr in inputConstraints:  
         try:
             boundConstraint = []

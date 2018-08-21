@@ -2,9 +2,12 @@
 from pulp import *
 
 def deriveReLuOutputDifferenceBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout1, nout2, bigM, minBound, maxBound, octagonBound, inputConstraints = [], seconds = 5):
-    '''
+    """Derive the output difference bound for two neurons nout1 and nout2.
 
-    '''
+    This is based on a partial re-implementation of the ATVA'17 paper https://arxiv.org/pdf/1705.01040.pdf.
+    See Proposition 1 for the MILP encoding, and using MILP to derive bounds is essentially the heuristic 1 in the paper. 
+    
+    """
     
     if layerIndex < 1:
         raise Error("layer index shall be smaller than X")
@@ -45,20 +48,29 @@ def deriveReLuOutputDifferenceBound(isMaxBound, layerIndex, weights, bias, numbe
     prob += c2 == -1*bias[nout2], "eq2"    
     
     # for neuron nout1
-    # c1: v >= im  <==> im - v  <= 0   
-    prob += variableDict["im_"+str(layerIndex)+"_"+str(nout1)] - variableDict["v_"+str(layerIndex)+"_"+str(nout1)] <= 0, "c1"
-    # c2: v <= im + (1-b)M <==> v - im + M(b) <= M 
-    prob += variableDict["v_"+str(layerIndex)+"_"+str(nout1)] -variableDict["im_"+str(layerIndex)+"_"+str(nout1)] + bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout1)] <= bigM, "c2"
-    # c3: v <= bM <=>  M(b) - V >= 0
-    prob += bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout1)] - variableDict["v_"+str(layerIndex)+"_"+str(nout1)] >= 0, "c3"
-
+    # c11: v >= im  <==> im - v  <= 0   
+    prob += variableDict["im_"+str(layerIndex)+"_"+str(nout1)] - variableDict["v_"+str(layerIndex)+"_"+str(nout1)] <= 0, "c11"
+    # c12: v <= im + (1-b)M <==> v - im + M(b) <= M 
+    prob += variableDict["v_"+str(layerIndex)+"_"+str(nout1)] -variableDict["im_"+str(layerIndex)+"_"+str(nout1)] + bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout1)] <= bigM, "c12"
+    # c13: v <= bM <=>  M(b) - V >= 0
+    prob += bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout1)] - variableDict["v_"+str(layerIndex)+"_"+str(nout1)] >= 0, "c13"
+    # c14: im + (1-b) M >= 0 <=> im - M(b) >= -M
+    prob += variableDict["im_"+str(layerIndex)+"_"+str(nout1)] - bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout1)] >= -1*bigM, "c14"    
+    # c15: im  - b M <= 0 
+    prob += variableDict["im_"+str(layerIndex)+"_"+str(nout1)] - bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout1)] <= 0, "c15" 
+    
+    
     # for neuron nout2
-    # c4: v >= im  <==> im - v  <= 0   
-    prob += variableDict["im_"+str(layerIndex)+"_"+str(nout2)] - variableDict["v_"+str(layerIndex)+"_"+str(nout2)] <= 0, "c4"
-    # c5: v <= im + (1-b)M <==> v - im + M(b) <= M 
-    prob += variableDict["v_"+str(layerIndex)+"_"+str(nout2)] -variableDict["im_"+str(layerIndex)+"_"+str(nout2)] + bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout2)] <= bigM, "c5"
-    # c6: v <= bM <=>  M(b) - V >= 0
-    prob += bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout2)] - variableDict["v_"+str(layerIndex)+"_"+str(nout2)] >= 0, "c6"
+    # c21: v >= im  <==> im - v  <= 0   
+    prob += variableDict["im_"+str(layerIndex)+"_"+str(nout2)] - variableDict["v_"+str(layerIndex)+"_"+str(nout2)] <= 0, "c21"
+    # c22: v <= im + (1-b)M <==> v - im + M(b) <= M 
+    prob += variableDict["v_"+str(layerIndex)+"_"+str(nout2)] -variableDict["im_"+str(layerIndex)+"_"+str(nout2)] + bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout2)] <= bigM, "c22"
+    # c23: v <= bM <=>  M(b) - V >= 0
+    prob += bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout2)] - variableDict["v_"+str(layerIndex)+"_"+str(nout2)] >= 0, "c23"
+    # c24: im + (1-b) M >= 0 <=> im - M(b) >= -M
+    prob += variableDict["im_"+str(layerIndex)+"_"+str(nout2)] - bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout2)] >= -1*bigM, "c24"    
+    # c25: im  - b M <= 0 
+    prob += variableDict["im_"+str(layerIndex)+"_"+str(nout2)] - bigM*variableDict["b_"+str(layerIndex)+"_"+str(nout2)] <= 0, "c25" 
     
     for constraint in octagonBound:
         boundConstraint = []
