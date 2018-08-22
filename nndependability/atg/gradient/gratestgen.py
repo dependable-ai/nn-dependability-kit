@@ -8,11 +8,11 @@ from torch.autograd.gradcheck import zero_gradients
 def generateTestCase (img, targetedNeuronIndex, desiredNAP, model):    
     """ Generate a test case to satisfy the specified neuronActivationPattern
     
-    Keyword arguments:
-    img -- an image to be perturbed towards the desired activation pattern
-    targetedNeuronIndex  --  Indices of neuron with the goal of satisfying the pattern
-    desiredNAP -- desired shape (>0 is set to 1; <= 0 is set to -1)
-    model -- neural network under analysis
+    Args:
+        img: an image to be perturbed towards the desired activation pattern
+        targetedNeuronIndex:  Indices of neuron with the goal of satisfying the pattern
+        desiredNAP: desired shape (>0 is set to 1; <= 0 is set to -1)
+        model: neural network under analysis
     """
     
 

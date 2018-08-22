@@ -7,12 +7,18 @@ import numpy as np
 def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, minBound, maxBound, octagonBound = []):
     """Derive the min or max output of a neuron using boxed domain and MILP, where the neuron is a linear function.
 
-    Keyword arguments:
-    isMaxBound -- derive max bound
-    layerIndex -- indexing of the layer in the overall network (for debugging purposes)
-    minBound -- array of input lower bounds
-    maxBound -- array of input upper bounds
-    octagonBound -- array of input constraints, with each specified with a shape of L_i <= in_i - in_j <= U_i 
+    This is based on a partial re-implementation of the ATVA'17 paper https://arxiv.org/pdf/1705.01040.pdf.
+    See Proposition 1 for the MILP encoding, and using MILP to derive bounds is essentially the heuristic 1 in the paper.     
+    
+    Args:
+        isMaxBound: derive max bound
+        layerIndex: indexing of the layer in the overall network (for debugging purposes)
+        minBound: array of input lower bounds
+        maxBound: array of input upper bounds
+        octagonBound: array of input constraints, with each specified with a shape of L <= in_i - in_j <= U, stored as [L, i, j, U] 
+
+    Returns:    
+    Raises:
     """
 
     if layerIndex < 1:
@@ -47,8 +53,8 @@ def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInput
             prob += c >= constraint[0]
             prob += c <= constraint[3]
         except:
-            # print(octagonBound)
-            print("Problem is processing octagonBound: "+ str(constraint))
+            # Print warning, then move on
+            print("Problem in processing octagonBound: "+ str(constraint))
             #print("", end='')
         
     # Objective
@@ -65,12 +71,17 @@ def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInput
 def isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfOutputs, minBound, maxBound, octagonBound = [], riskProperty = []):
     """Compute if a certain risk property associated with a certain neuron layer is reachable.
 
-    Keyword arguments:
-    layerIndex -- indexing of the layer in the overall network (for debugging purposes)
-    minBound -- array of input lower bounds
-    maxBound -- array of input upper bounds
-    octagonBound -- array of input constraints, with each specified with a shape of L_i <= in_i - in_j <= U_i 
-    riskProperty -- array of linear constraints related to output value of the layer
+    This is based on a partial re-implementation of the ATVA'17 paper https://arxiv.org/pdf/1705.01040.pdf.
+    See Proposition 1 for the MILP encoding, and using MILP to derive bounds is essentially the heuristic 1 in the paper.     
+    
+    Args:
+        layerIndex: indexing of the layer in the overall network (for debugging purposes)
+        minBound: array of input lower bounds
+        maxBound: array of input upper bounds
+        octagonBound: array of input constraints, with each specified with a shape of L <= in_i - in_j <= U, stored as [L, i, j, U]
+        riskProperty: array of linear constraints related to output value of the layer
+    Returns:    
+    Raises:
     """
 
     if layerIndex < 1:
@@ -164,12 +175,14 @@ def deriveReLuOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs,
     This is based on a partial re-implementation of the ATVA'17 paper https://arxiv.org/pdf/1705.01040.pdf.
     See Proposition 1 for the MILP encoding, and using MILP to derive bounds is essentially the heuristic 1 in the paper. 
     
-    Keyword arguments:
-    isMaxBound -- derive max bound
-    layerIndex -- indexing of the layer in the overall network (for debugging purposes)
-    minBound -- array of input lower bounds
-    maxBound -- array of input upper bounds
-    octagonBound -- array of input constraints, with each specified with a shape of L_i <= in_i - in_j <= U_i 
+    Args:
+        isMaxBound: derive max bound
+        layerIndex: indexing of the layer in the overall network (for debugging purposes)
+        minBound: array of input lower bounds
+        maxBound: array of input upper bounds
+        octagonBound: array of input constraints, with each specified with a shape of L <= in_i - in_j <= U, stored as [L, i, j, U]
+    Returns:    
+    Raises:
     """
     
     if layerIndex < 1:

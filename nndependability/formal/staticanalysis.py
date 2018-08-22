@@ -11,14 +11,24 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
     Finally, if risk property is provided, it checks if the computed bound implies the risk property. The computation is done by formulating 
     the bound computation as a MILP problem. 
     
-    Keyword arguments:
-    inputMinBound -- array of input lower bounds
-    inputMaxBound -- array of input upper bounds
-    net -- neural network description 
-    isUsingBox -- true if apply only boxed abstraction; false if also apply octagon abstraction
-    isAvoidQuadraticConstraints -- for octagon abstraction, whether to avoid generating full octagon constraints (quadratic to the number of neurons)
+    Currently, it only works for multi-layer perceptron network where 
+    (1) all layers are fully connected,
+    (2) all-but-output layers are with ReLU, and 
+    (3) output layer has identity activation function (i.e., it is linear)
+    
+    Args:
+        inputMinBound: array of input lower bounds
+        inputMaxBound: array of input upper bounds
+        net: neural network description 
+        isUsingBox: true if apply only boxed abstraction; false if also apply octagon abstraction
+        isAvoidQuadraticConstraints -- for octagon abstraction, whether to avoid generating full octagon constraints (quadratic to the number of neurons)
+    
+    Returns:    
+    Raises:
     """
 
+    # TODO(CH): Add a mechanism to detect if the structure of the network is MLP with FC.
+    # TODO(CH): Refactor the function
     
     lastLayerName = None
     # Derive the name of the last layer

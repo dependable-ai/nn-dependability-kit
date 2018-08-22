@@ -4,7 +4,19 @@ import math
 import scipy.misc
 
 class Neuron_OnOff_KProjection_Metric():
-    
+    """Computing neuron on-off k-projection metric.
+
+    Details on how this metric is defined is in Sec II.B of the paper 
+    "Towards Dependability Metrics for Neural Networks" (https://arxiv.org/abs/1806.02338) 
+    It is essentially applying the idea of combinatorial testing and covering arrays.
+
+    Attributes:
+        kValue: The constant k value for creating the coverage table
+        numberOfNeuronsToTrack: number of neurons being monitored
+        k_Activation_record: actual record 
+    """
+
+
     def __init__(self, kValue, numberOfNeuronsToTrack):
             
         if not (kValue == 1 or kValue == 2):

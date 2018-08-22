@@ -4,12 +4,15 @@ from ortools.linear_solver import pywraplp
 from ...metrics import KProjection
 
 def proposeNAPcandidate(metric):
-    ''' Based on the current metric, propose an on-off neuron activation neuron that maximally increase k-projection coverage (non-quantitative setup).
-    '''
+    """ Based on the current metric, propose an on-off neuron activation neuron that maximally increase k-projection coverage (non-quantitative setup).
+    """
     lpConstraint = prepareLPconstraint(metric)
     solveCP(lpConstraint, metric)
 
 def solveCP(lpConstraint, metric):
+    """ Solve the MILP constraint program.
+    
+    """
 
     # Instantiate a mixed-integer solver, naming it SolveIntegerProblem.
     solver = pywraplp.Solver('SolveIntegerProblem', pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
@@ -62,6 +65,9 @@ def solveCP(lpConstraint, metric):
     
     
 def prepareLPconstraint(metric):
+    """ Prepare the MILP constraint for maximally improving neuron-k-activation-pattern coverage.
+    """
+
     # kValue, numberOfNeuronsToTrack, k_Activation_record
     
     if not (type(metric) == KProjection.Neuron_OnOff_KProjection_Metric):

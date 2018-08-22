@@ -7,6 +7,15 @@ def deriveReLuOutputDifferenceBound(isMaxBound, layerIndex, weights, bias, numbe
     This is based on a partial re-implementation of the ATVA'17 paper https://arxiv.org/pdf/1705.01040.pdf.
     See Proposition 1 for the MILP encoding, and using MILP to derive bounds is essentially the heuristic 1 in the paper. 
     
+    Args:
+        isMaxBound: derive max bound
+        layerIndex: indexing of the layer in the overall network (for debugging purposes)
+        minBound: array of input lower bounds
+        maxBound: array of input upper bounds
+        octagonBound: array of input constraints, with each specified with a shape of L <= in_i - in_j <= U, stored as [L, i, j, U] 
+
+    Returns:    
+    Raises:
     """
     
     if layerIndex < 1:
