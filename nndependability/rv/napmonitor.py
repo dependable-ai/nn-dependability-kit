@@ -122,7 +122,7 @@ class NAP_Monitor(monitor.BddMonitor):
         return True  
         
         
-    def enlargeSetByOneBitFluctuation(self, classIndex):
+    def enlargeSetByOneBitFluctuation(self, classIndex = -1):
         """ Enlarge the monitor by adding all elements whose Hamming distance is 1 to the element, which can be done by bdd.exists
 
         """   

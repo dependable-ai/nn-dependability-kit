@@ -120,7 +120,7 @@ def iterative_targeted_FGSM_attack (img, label, anotherLabel, model):
     
 
 
-def drawFrontCar(imgFile, boundingBox):
+def drawFrontCar(imgFile, boundingBox = None):
     im = np.array(Image.open(imgFile), dtype=np.uint8)
 
     # Create figure and axes
@@ -129,11 +129,12 @@ def drawFrontCar(imgFile, boundingBox):
     # Display the image
     ax.imshow(im)
 
-    # Create a Rectangle patch
-    rect = patches.Rectangle((int(boundingBox[0]-boundingBox[2]/2),int(boundingBox[1]-boundingBox[3]/2)),int(boundingBox[2]),int(boundingBox[3]),linewidth=1,edgecolor='r',facecolor='none')
+    if not (boundingBox == None):
+        # Create a Rectangle patch
+        rect = patches.Rectangle((int(boundingBox[0]-boundingBox[2]/2),int(boundingBox[1]-boundingBox[3]/2)),int(boundingBox[2]),int(boundingBox[3]),linewidth=1,edgecolor='r',facecolor='none')
 
-    # Add the patch to the Axes
-    ax.add_patch(rect)
+        # Add the patch to the Axes
+        ax.add_patch(rect)
 
     plt.show()
 
