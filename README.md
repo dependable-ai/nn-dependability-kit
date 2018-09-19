@@ -33,5 +33,5 @@ There are four packages under nndependability, namely
 
 - [Metrics & test case generation] https://arxiv.org/abs/1806.02338
 - [Static analysis & formal verification] https://arxiv.org/abs/1705.01040 
-- [Runtime verification] To be available on ArXiv soon (a preliminary version can be found in )
+- [Runtime verification] https://arxiv.org/abs/1809.06573
 

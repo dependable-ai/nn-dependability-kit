@@ -97,27 +97,31 @@ class Neuron_OnOff_KProjection_Metric():
                     if (ivabs[exampleIndex,neuronIndexI] >0):
                         for neuronIndexJ in range(neuronIndexI+1, self.numberOfNeuronsToTrack):
                             if(ivabs[exampleIndex,neuronIndexJ]  >0) : 
-                                if(ivabs[exampleIndex,neuronIndexK]  >0) :
-                                    self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("111")                                
-                                else:
-                                    self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("110")
+                                for neuronIndexK in range(neuronIndexJ+1, self.numberOfNeuronsToTrack):
+                                    if(ivabs[exampleIndex,neuronIndexK]  >0) :
+                                        self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("111")                                
+                                    else:
+                                        self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("110")
                             else:
-                                if(ivabs[exampleIndex,neuronIndexK]  >0) :
-                                    self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("101")                                
-                                else:
-                                    self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("100")
+                                for neuronIndexK in range(neuronIndexJ+1, self.numberOfNeuronsToTrack):
+                                    if(ivabs[exampleIndex,neuronIndexK]  >0) :
+                                        self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("101")                                
+                                    else:
+                                        self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("100")
                     else : 
                         for neuronIndexJ in range(neuronIndexI+1, self.numberOfNeuronsToTrack):
                             if(ivabs[exampleIndex,neuronIndexJ]  >0) : 
-                                if(ivabs[exampleIndex,neuronIndexK]  >0) :
-                                    self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("011")                                
-                                else:
-                                    self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("010")
+                                for neuronIndexK in range(neuronIndexJ+1, self.numberOfNeuronsToTrack):
+                                    if(ivabs[exampleIndex,neuronIndexK]  >0) :
+                                        self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("011")                                
+                                    else:
+                                        self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("010")
                             else: 
-                                if(ivabs[exampleIndex,neuronIndexK]  >0) :
-                                    self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("001")                                
-                                else:
-                                    self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("000")                            
+                                for neuronIndexK in range(neuronIndexJ+1, self.numberOfNeuronsToTrack):
+                                    if(ivabs[exampleIndex,neuronIndexK]  >0) :
+                                        self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("001")                                
+                                    else:
+                                        self.k_Activation_record["N" + str(neuronIndexI) +"_"+ "N"+ str(neuronIndexJ)+"_"+ "N"+ str(neuronIndexK)].add("000")                            
         else:
             print("Currently not supported")
 
