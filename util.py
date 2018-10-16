@@ -18,7 +18,7 @@ def displayMNIST (img):
 
     if not (type(img) is np.ndarray) : 
         raise TypeError("Only numpy.array is supported")
-    if not (img.ndim == 3):
+    if not (img.ndim == 3 and img.shape[0] == 1):
         raise AttributeError("Expects (1, 28, 28) shape")
     
     img = np.squeeze(img, axis=0) * 255
@@ -36,8 +36,8 @@ def displayGTSRB (img):
 
     if not (type(img) is np.ndarray) : 
         raise TypeError("Only numpy.array is supported")
-    if not (img.ndim == 3):
-        raise AttributeError("Expects (3, 32, 32) shape")
+    if not (img.ndim == 3 and img.shape[0] == 3):
+        raise AttributeError("Expects (3, length, width) shape")
         
     # show images, by np.moveaxis(img, 0, -1), i.e., moving the axis from (3, 32, 32) to (32, 32, 3)
     plt.figure(figsize=(2,2))
@@ -45,11 +45,12 @@ def displayGTSRB (img):
 
 
 def iterative_FGSM_attack (img, label, model):    
-    
-    eps = 5 * 8 / 225. 
+    # eps = 5 * 8 / 225.     
+    eps = 1 * 8 / 225. 
     steps = 100
     norm = float('inf')
-    step_alpha = 0.05 
+    # step_alpha = 0.05 
+    step_alpha = 0.01 
     loss = nn.CrossEntropyLoss()
     
     x, y = Variable(img, requires_grad=True), Variable(label)
@@ -82,10 +83,12 @@ def iterative_FGSM_attack (img, label, model):
 
 def iterative_targeted_FGSM_attack (img, label, anotherLabel, model):    
     
-    eps = 5 * 8 / 225. 
+    # eps = 5 * 8 / 225. 
+    eps = 1 * 8 / 225. 
     steps = 100
     norm = float('inf')
-    step_alpha = 0.05 
+    # step_alpha = 0.05 
+    step_alpha = 0.01
     loss = nn.CrossEntropyLoss()
     
     x, y = Variable(img, requires_grad=True), Variable(anotherLabel)
