@@ -42,6 +42,7 @@ def displayGTSRB (img):
     # show images, by np.moveaxis(img, 0, -1), i.e., moving the axis from (3, 32, 32) to (32, 32, 3)
     plt.figure(figsize=(2,2))
     image = plt.imshow(np.moveaxis(img, 0, -1))
+    plt.grid(False)
 
 
 def iterative_FGSM_attack (img, label, model):    

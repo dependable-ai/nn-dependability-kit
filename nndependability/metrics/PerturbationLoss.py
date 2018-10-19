@@ -49,7 +49,7 @@ def evaluateImageAndComputeSoftmax(net, image, label):
         # Otherwise, take the original label and check what is the probability now
         return int(predicted[0].data), softmax(outputs[0].detach().numpy())[int(label)]
 
-# https://github.com/noahzn/FoHIS (Foggy and Hazy Images)
+
 def add_weather(image, weather_typ):
     if not (image.ndim == 3 and image.shape[2] == 3):
         raise Exception("Dimension should be (length x widthx 3)")
@@ -67,6 +67,37 @@ def add_weather(image, weather_typ):
         image_RGB = cv2.cvtColor(image_HLS, cv2.COLOR_HLS2RGB) ## Conversion to RGB
         return image_RGB
 
+    elif weather_typ == "haze": 
+        # Create an overly simplified version out of the the open source SW from https://github.com/noahzn/FoHIS (Foggy and Hazy Images), 
+        # where for simple object recognition, one does not need to have depth information associated.        
+        height, width = image.shape[:2]
+        # Change from 1.5 to 1 to create less haze
+        distance = np.ones((height, width))*1.5
+
+        distance_through_fog = np.zeros_like(distance)
+        distance_through_haze = np.zeros_like(distance)
+        distance_through_haze_free = np.zeros_like(distance)        
+        
+        I = np.empty_like(image)
+        result = np.empty_like(image)
+
+        I[:, :, 0] = image[:, :, 0] * np.exp(-1*distance)
+        I[:, :, 1] = image[:, :, 1] * np.exp(-1*distance)
+        I[:, :, 2] = image[:, :, 2] * np.exp(-1*distance)
+        O = 1-np.exp(-1*distance)
+        
+        Ial = np.empty_like(image)  # color of the fog/haze
+        Ial[:, :, 0] = 225/255
+        Ial[:, :, 1] = 225/255
+        Ial[:, :, 2] = 201/255
+        
+        result[:, :, 0] = I[:, :, 0] + O * Ial[:, :, 0]
+        result[:, :, 1] = I[:, :, 1] + O * Ial[:, :, 1]
+        result[:, :, 2] = I[:, :, 2] + O * Ial[:, :, 2]
+   
+        return result
+
+        
 def add_noise(noise_typ, image):
     '''
     Based on modification of https://stackoverflow.com/questions/22937589/how-to-add-noise-gaussian-salt-and-pepper-etc-to-image-in-python-with-opencv
@@ -170,7 +201,7 @@ class Perturbation_Loss_Metric():
 
     def __init__(self):
         self.lossMatrices = []    
-        self.perturbationKind = ["gauss", "poisson", "s&p", "fgsm", "snow"]
+        self.perturbationKind = ["gauss", "poisson", "s&p", "fgsm", "snow", "haze"]
     
 
     
@@ -192,7 +223,9 @@ class Perturbation_Loss_Metric():
             npArray = npArray[npArray[:,3].argsort()]
             result.append(npArray[-1][3])        
             npArray = npArray[npArray[:,4].argsort()]
-            result.append(npArray[-1][4])             
+            result.append(npArray[-1][4])   
+            npArray = npArray[npArray[:,5].argsort()]
+            result.append(npArray[-1][5])                 
         elif (criterion == "TOP_10%_LARGEST_LOSS"):
             npArray = npArray[npArray[:,0].argsort()]
             result.append(npArray[int(len(self.lossMatrices)*9/10)][0])  
@@ -204,6 +237,8 @@ class Perturbation_Loss_Metric():
             result.append(npArray[int(len(self.lossMatrices)*9/10)][3])                
             npArray = npArray[npArray[:,4].argsort()]
             result.append(npArray[int(len(self.lossMatrices)*9/10)][4])     
+            npArray = npArray[npArray[:,5].argsort()]
+            result.append(npArray[int(len(self.lossMatrices)*9/10)][5])                
         else:
             raise AttributeError("Currently only AVERAGE_LOSS, MAX_LOSS, TOP_10%_LARGEST_LOSS are supported")
         
@@ -266,15 +301,21 @@ class Perturbation_Loss_Metric():
         
         # Snow
         imagep = add_weather(imageFor, "snow")
-        result4 = np.moveaxis(imagep/255.0, -1, 0)
-        c5, prob5 = evaluateImageAndComputeSoftmax(net, result4, label)
+        result5 = np.moveaxis(imagep/255.0, -1, 0)
+        c5, prob5 = evaluateImageAndComputeSoftmax(net, result5, label)
+
+        # Haze
+        imagep = add_weather(imageFor, "haze")
+        result6 = np.moveaxis(imagep, -1, 0)
+        c6, prob6 = evaluateImageAndComputeSoftmax(net, result6, label)
+        
         
         # Compute the performance drop of current image
-        performanceDrop = [100*(prob0 - prob1), 100*(prob0 - prob2), 100*(prob0 - prob3), 100*(prob0 - prob4), 100*(prob0 - prob5)]
+        performanceDrop = [100*(prob0 - prob1), 100*(prob0 - prob2), 100*(prob0 - prob3), 100*(prob0 - prob4), 100*(prob0 - prob5), 100*(prob0 - prob6)]
         
         # If after the noise, the identification rate increases, just set it to be 0.
         performanceDropClip = []
-        for i in range(5):
+        for i in range(6):
             if performanceDrop[i] < 0:
                 performanceDropClip.append(0.0)
             else:
