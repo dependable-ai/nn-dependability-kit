@@ -168,12 +168,23 @@ def isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfO
     else:
         return True
 
-    
 def deriveReLuOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, bigM, minBound, maxBound, inputConstraints = []):
+    value = deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, minBound, maxBound)
+    if value < 0:
+        return 0
+    else:    
+        return value
+        
+
+    
+def deriveReLuOutputBoundMLIP(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, bigM, minBound, maxBound, inputConstraints = []):
     """Derive the min or max output of a neuron using boxed domain and MILP, where the neuron is a ReLU function.
 
     This is based on a partial re-implementation of the ATVA'17 paper https://arxiv.org/pdf/1705.01040.pdf.
     See Proposition 1 for the MILP encoding, and using MILP to derive bounds is essentially the heuristic 1 in the paper. 
+    
+    
+    This encoding is not needed, unless we want to do complete verification. 
     
     Args:
         isMaxBound: derive max bound
