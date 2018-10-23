@@ -1,0 +1,6 @@
+[submodule "models/SSD-Tensorflow"]
+	path = models/SSD-Tensorflow
+	url = https://github.com/balancap/SSD-Tensorflow
+[submodule "nndependability/metrics/saliency-source"]
+	path = nndependability/metrics/saliency-source
+	url = https://github.com/PAIR-code/saliency
