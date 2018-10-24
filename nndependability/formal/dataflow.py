@@ -48,10 +48,10 @@ def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInput
         try:
             boundConstraint = []
             boundConstraint.append((variableDict[constraint[1]], 1))
-            boundConstraint.append((variableDict[constraint[2]], -1))
+            boundConstraint.append((variableDict[constraint[3]], constraint[2]))
             c = LpAffineExpression(boundConstraint)
             prob += c >= constraint[0]
-            prob += c <= constraint[3]
+            prob += c <= constraint[4]
         except:
             # Print warning, then move on
             print("Problem in processing octagonBound: "+ str(constraint))
@@ -113,10 +113,10 @@ def isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfO
         try:
             boundConstraint = []
             boundConstraint.append((variableDict[constraint[1]], 1))
-            boundConstraint.append((variableDict[constraint[2]], -1))
+            boundConstraint.append((variableDict[constraint[3]], constraint[2]))
             c = LpAffineExpression(boundConstraint)
             prob += c >= constraint[0]
-            prob += c <= constraint[3]
+            prob += c <= constraint[4]
         except:
             print("", end='')
  
@@ -184,7 +184,7 @@ def deriveReLuOutputBoundMLIP(isMaxBound, layerIndex, weights, bias, numberOfInp
     See Proposition 1 for the MILP encoding, and using MILP to derive bounds is essentially the heuristic 1 in the paper. 
     
     
-    This encoding is not needed, unless we want to do complete verification. 
+    This encoding with big-M is not needed, unless we want to do complete verification. 
     
     Args:
         isMaxBound: derive max bound

@@ -1,7 +1,7 @@
 # Import PuLP modeler functions
 from pulp import *
 
-def deriveReLuOutputDifferenceBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout1, nout2, bigM, minBound, maxBound, octagonBound, inputConstraints = [], seconds = 5):
+def deriveReLuOutputOctagonBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout1, nout2, bigM, minBound, maxBound, octagonBound, isDifference, inputConstraints = [], seconds = 5):
     """Derive the output difference bound for two neurons nout1 and nout2.
 
     This is based on a partial re-implementation of the ATVA'17 paper https://arxiv.org/pdf/1705.01040.pdf.
@@ -13,7 +13,7 @@ def deriveReLuOutputDifferenceBound(isMaxBound, layerIndex, weights, bias, numbe
         minBound: array of input lower bounds
         maxBound: array of input upper bounds
         octagonBound: array of input constraints, with each specified with a shape of L <= in_i - in_j <= U, stored as [L, i, j, U] 
-
+        isDifference: compute v1-v2 if True, v1+v2 if False
     Returns:    
     Raises:
     """
@@ -84,10 +84,10 @@ def deriveReLuOutputDifferenceBound(isMaxBound, layerIndex, weights, bias, numbe
     for constraint in octagonBound:
         boundConstraint = []
         boundConstraint.append((variableDict[constraint[1]], 1))
-        boundConstraint.append((variableDict[constraint[2]], -1))
+        boundConstraint.append((variableDict[constraint[3]], constraint[2]))
         c = LpAffineExpression(boundConstraint)
         prob += c >= constraint[0]
-        prob += c <= constraint[3]
+        prob += c <= constraint[4]
 
     for inputConstr in inputConstraints:  
         try:
@@ -111,7 +111,11 @@ def deriveReLuOutputDifferenceBound(isMaxBound, layerIndex, weights, bias, numbe
             #print("", end='')     
     
     # Objective
-    prob += variableDict["v_"+str(layerIndex)+"_"+str(nout1)] - variableDict["v_"+str(layerIndex)+"_"+str(nout2)], "obj"
+    if isDifference == True:
+        prob += variableDict["v_"+str(layerIndex)+"_"+str(nout1)] - variableDict["v_"+str(layerIndex)+"_"+str(nout2)], "obj"    
+    else:
+        prob += variableDict["v_"+str(layerIndex)+"_"+str(nout1)] + variableDict["v_"+str(layerIndex)+"_"+str(nout2)], "obj"
+
     
     # prob.writeLP("test.lp")
     # Solve the problem using the default solver (CBC)
