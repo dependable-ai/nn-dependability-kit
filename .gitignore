@@ -2,6 +2,7 @@
 __pycache__
 data/*
 !data/frontcardetection
+!data/VOC_examples
 local
 bound_nout_1_0.lp
 bound_nout_2_0.lp
