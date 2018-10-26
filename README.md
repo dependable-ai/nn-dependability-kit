@@ -45,7 +45,9 @@ cd ../../
 - [Metrics & test case generation] https://arxiv.org/abs/1806.02338
 - [Static analysis & formal verification] https://arxiv.org/abs/1705.01040 
 - [Runtime verification] https://arxiv.org/abs/1809.06573
-
+- [SSD-example] The example uses a few pictures from the VOC2012 dataset: The PASCAL Visual Object Classes (VOC) Challenge
+Everingham, M., Van Gool, L., Williams, C. K. I., Winn, J. and Zisserman, A.
+International Journal of Computer Vision, 88(2), 303-338, 2010
 ## Preparation for SSD example
 ```
 cd models/SSD-Tensorflow/
