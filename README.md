@@ -11,7 +11,7 @@ GNU Affero General Public License (AGPL) Version 3
 Examples are presented as jupyter notebooks to allow step-by-step understanding over the concepts. 
 
 - [Formal verification] TargetVehicleProcessingNetwork_FormalVerification.ipynb
-- [Metrics & test case generation] GTSRB_Neuron2ProjectionCoverage_TestGen.ipynb, or MNIST_Neuron2ProjectionCoverage_TestGen.ipynb  
+- [Metrics & test case generation] GTSRB_Neuron2ProjectionCoverage_TestGen.ipynb, or MNIST_Neuron2ProjectionCoverage_TestGen.ipynb, or SSD_InterpretationPrecision.ipynb
 - [Runtime verification] GTSRB_RuntimeMonitoring.ipynb, or MNIST_RuntimeMonitoring.ipynb  
 
 ## Structure
@@ -26,6 +26,17 @@ There are four packages under nndependability, namely
 
 - PyTorch 4.0 + Numpy + matplotlib + jupyter
 - [Test case generation] Google optimization research tools (https://developers.google.com/optimization/introduction/installing/binary)
+- [Metrics] saliency (https://github.com/PAIR-code/saliency)
+  Use it in the following way:
+```
+# init submodule for saliency
+cd nndependability/metrics/saliency-source/
+git submodule init
+git submodule update
+cd ..
+ln -s saliency-source/saliency saliency
+cd ../../
+```
 - [Verification / static analysis] pulp (python-based MILP connector to CBC and other solvers)
 - [Run-time verification] dd (binary decision diagram implemented using python)
 
@@ -34,5 +45,21 @@ There are four packages under nndependability, namely
 - [Metrics & test case generation] https://arxiv.org/abs/1806.02338
 - [Static analysis & formal verification] https://arxiv.org/abs/1705.01040 
 - [Runtime verification] https://arxiv.org/abs/1809.06573
+- [SSD-example] The example uses a few pictures from the VOC2012 dataset: The PASCAL Visual Object Classes (VOC) Challenge
+Everingham, M., Van Gool, L., Williams, C. K. I., Winn, J. and Zisserman, A.
+International Journal of Computer Vision, 88(2), 303-338, 2010
+## Preparation for SSD example
+```
+cd models/SSD-Tensorflow/
+git submodule init
+git submodule update
 
+# prepare weights
+cd checkpoints/
+unzip ssd_300_vgg.ckpt.zip
+cd ../
 
+# install custom changes to module SSD-Tensorflow that allows using saliency
+git apply ../ssd_tensorflow_diff.diff
+cd ../../
+```
