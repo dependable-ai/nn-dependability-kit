@@ -105,8 +105,10 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
         return minBound[layerIndex-1], maxBound[layerIndex-1]
     
 
+    # Also compute separately to derive the lower bound of the linear sum, in order to get a small bigM value
+    minLinearBound = dict()
+    minLinearBound[0] = inputMinBound
 
-    # Also derive the lower bound of the linear sum, in order to get a small bigM value
     layerIndex = 1
     for name, param in net.named_parameters():
         if name.endswith(".weight"):
@@ -126,10 +128,10 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
             numberOfOutputs = weights.shape[0]
             numberOfInputs = weights.shape[1]
 
-            minBound[layerIndex] = np.zeros(numberOfOutputs)
+            minLinearBound[layerIndex] = np.zeros(numberOfOutputs)
 
             for i in range(numberOfOutputs):
-                minBound[layerIndex][i] = dataflow.deriveLinearOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1])
+                minLinearBound[layerIndex][i] = dataflow.deriveLinearOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1])
 
             layerIndex = layerIndex + 1     
 
@@ -141,9 +143,9 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
             bigM =  np.max(np.absolute(maxBound[i]))
     print("bigM under abs(max bound): "+ str(bigM))
     
-    for i in range(len(minBound)):
-        if bigM < np.max(np.absolute(minBound[i])):
-            bigM =  np.max(np.absolute(minBound[i]))
+    for i in range(len(minLinearBound)):
+        if bigM < np.max(np.absolute(minLinearBound[i])):
+            bigM =  np.max(np.absolute(minLinearBound[i]))
     print("bigM under abs(min bound): "+ str(bigM))
             
     # The user requested to perform analysis over the network with Octagon abstraction
