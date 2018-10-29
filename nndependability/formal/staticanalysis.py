@@ -104,13 +104,48 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
         print("Completed\n\n")
         return minBound[layerIndex-1], maxBound[layerIndex-1]
     
+
+
+    # Also derive the lower bound of the linear sum, in order to get a small bigM value
+    layerIndex = 1
+    for name, param in net.named_parameters():
+        if name.endswith(".weight"):
+            weights = param.detach().numpy()
+            print("[Boxed abstraction] Processing layer "+name.replace(".weight", "") + "; derive linear sum lower bound")
+        elif name.endswith(".bias"):
+            weights = None
+            bias = None
+            
+            # Find the associated weights
+            for name2, param2 in net.named_parameters():
+                if(name2 == name.replace(".bias", ".weight")):
+                    weights = param2.detach().numpy()
+
+            
+            bias = param.detach().numpy()
+            numberOfOutputs = weights.shape[0]
+            numberOfInputs = weights.shape[1]
+
+            minBound[layerIndex] = np.zeros(numberOfOutputs)
+
+            for i in range(numberOfOutputs):
+                minBound[layerIndex][i] = dataflow.deriveLinearOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1])
+
+            layerIndex = layerIndex + 1     
+
     
     # Compute a smaller bigM value, in order to be fed into the Octagon analysis 
     bigM = 0
     for i in range(len(maxBound)):
-        if bigM < np.max(maxBound[i]):
-            bigM =  np.max(maxBound[i])
+        if bigM < np.max(np.absolute(maxBound[i])):
+            bigM =  np.max(np.absolute(maxBound[i]))
+    print("bigM under abs(max bound): "+ str(bigM))
     
+    for i in range(len(minBound)):
+        if bigM < np.max(np.absolute(minBound[i])):
+            bigM =  np.max(np.absolute(minBound[i]))
+    print("bigM under abs(min bound): "+ str(bigM))
+            
     # The user requested to perform analysis over the network with Octagon abstraction
     octagonBound = dict()
     octagonBound[0] = []
