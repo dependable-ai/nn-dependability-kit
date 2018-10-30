@@ -1,10 +1,11 @@
 # Import PuLP modeler functions
 from pulp import *
 import numpy as np
+import math
 
 
 
-def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, minBound, maxBound, octagonBound = []):
+def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, minBound, maxBound, octagonBound = [], inputConstraints = []):
     """Derive the min or max output of a neuron using boxed domain and MILP, where the neuron is a linear function.
 
     This is based on a partial re-implementation of the ATVA'17 paper https://arxiv.org/pdf/1705.01040.pdf.
@@ -32,7 +33,7 @@ def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInput
         prob = LpProblem("test1", LpMinimize)                
         
     variableDict = dict()  
-    variableDict["v_"+str(layerIndex)+"_"+str(nout)] =  LpVariable("v_"+str(layerIndex)+"_"+str(nout), lowBound=0, upBound=None , cat='Continuous')             
+    variableDict["v_"+str(layerIndex)+"_"+str(nout)] =  LpVariable("v_"+str(layerIndex)+"_"+str(nout), lowBound=None, upBound=None , cat='Continuous')             
     for nin in range(numberOfInputs):
         variableDict["v_"+str(layerIndex-1)+"_"+str(nin)] = LpVariable("v_"+str(layerIndex -1)+"_"+str(nin), lowBound=minBound[nin], upBound=maxBound[nin] , cat='Continuous') 
       
@@ -43,6 +44,27 @@ def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInput
         equalityConstraint.append((variableDict["v_"+str(layerIndex-1)+"_"+str(nin)], weights[nin].item()))
     c = LpAffineExpression(equalityConstraint)
     prob += c == -1*bias, "eq"
+
+    for inputConstr in inputConstraints:  
+        try:
+            boundConstraint = []
+            for i in range(int(len(inputConstr)/2) - 1):
+                boundConstraint.append((variableDict[inputConstr[2*(i+1)+1].replace("in", "v_0_")], inputConstr[2*(i+1)]))
+            c = LpAffineExpression(boundConstraint)
+            # Here be careful - if the sign is "<=" then one shall place ">="
+            if inputConstr[1] == "<=":
+                prob += c >= inputConstr[0]
+            elif inputConstr[1] == "==":
+                prob += c == inputConstr[0]
+            elif inputConstr[1] == ">=":
+                prob += c <= inputConstr[0]
+            else:
+                raise ValueError('Operators shall be <=, == or >=')                
+            #print(c)
+        except:
+            print("Problem is processing input constraint: "+ str(inputConstr))
+            #print("", end='')    
+    
     
     for constraint in octagonBound:    
         try:
@@ -61,13 +83,41 @@ def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInput
     prob += variableDict["v_"+str(layerIndex)+"_"+str(nout)], "obj"
     
     if nout == 0:
-        prob.writeLP("bound_nout_"+str(layerIndex)+"_"+str(nout)+".lp")    
+        if isMaxBound:
+            prob.writeLP("bound_nout_max_"+str(layerIndex)+"_"+str(nout)+".lp")
+        else:
+            prob.writeLP("bound_nout_min_"+str(layerIndex)+"_"+str(nout)+".lp")
 
     # Solve the problem using the default solver (CBC)
     prob.solve()
 
-    return value(prob.objective)
+    if prob.status == 1:
+        return value(prob.objective)
+    else:
+        if isMaxBound:            
+            print("Warning in computing maxbound of "+"v_"+str(layerIndex)+"_"+str(nout)+": solver Status:", LpStatus[prob.status])        
+            if(prob.status == -1):
+                print("Error in LP/MILP solver: Impossible for simple linear constraint to have no bound")
+            prob.writeLP("bound_nout_max_"+str(layerIndex)+"_"+str(nout)+".lp")  
+            #printSolverStatus()
+            return math.inf
+        else: 
+            print("Warning in computing minbound of "+"v_"+str(layerIndex)+"_"+str(nout)+": solver Status:", LpStatus[prob.status])
+            if(prob.status == -1):
+                print("Error in LP/MILP solver: Impossible for simple linear constraint to have no bound")            
+            prob.writeLP("bound_nout_min_"+str(layerIndex)+"_"+str(nout)+".lp")              
+            #printSolverStatus()
+            return -math.inf   
+    
 
+def printSolverStatus():
+    print("#LpStatusOptimal	“Optimal”	1")
+    print("#LpStatusNotSolved	“Not Solved”	0")
+    print("#LpStatusInfeasible	“Infeasible”	-1")
+    print("#LpStatusUnbounded	“Unbounded”	-2")
+    print("#LpStatusUndefined	“Undefined”	-3")
+
+    
 def isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfOutputs, minBound, maxBound, octagonBound = [], riskProperty = []):
     """Compute if a certain risk property associated with a certain neuron layer is reachable.
 
@@ -96,7 +146,7 @@ def isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfO
         
     variableDict = dict()  
     for nout in range(numberOfOutputs):
-        variableDict["v_"+str(layerIndex)+"_"+str(nout)] =  LpVariable("v_"+str(layerIndex)+"_"+str(nout), lowBound=0, upBound=None , cat='Continuous')             
+        variableDict["v_"+str(layerIndex)+"_"+str(nout)] =  LpVariable("v_"+str(layerIndex)+"_"+str(nout), lowBound=None, upBound=None , cat='Continuous')             
     for nin in range(numberOfInputs):
         variableDict["v_"+str(layerIndex-1)+"_"+str(nin)] = LpVariable("v_"+str(layerIndex -1)+"_"+str(nin), lowBound=minBound[nin], upBound=maxBound[nin] , cat='Continuous') 
       
@@ -169,15 +219,14 @@ def isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfO
         return True
 
 def deriveReLuOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, bigM, minBound, maxBound, inputConstraints = []):
-    value = deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, minBound, maxBound)
+    value = deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, minBound, maxBound, [], inputConstraints)
     if value < 0:
         return 0
     else:    
         return value
         
 
-    
-def deriveReLuOutputBoundMLIP(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, bigM, minBound, maxBound, inputConstraints = []):
+def deriveReLuOutputBoundMILP(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, bigM, minBound, maxBound, inputConstraints = []):
     """Derive the min or max output of a neuron using boxed domain and MILP, where the neuron is a ReLU function.
 
     This is based on a partial re-implementation of the ATVA'17 paper https://arxiv.org/pdf/1705.01040.pdf.
@@ -253,16 +302,30 @@ def deriveReLuOutputBoundMLIP(isMaxBound, layerIndex, weights, bias, numberOfInp
             print("Problem is processing input constraint: "+ str(inputConstr))
             #print("", end='')    
     
-    
     # Objective
     prob += variableDict["v_"+str(layerIndex)+"_"+str(nout)], "obj"
 
     if nout == 0:
-        prob.writeLP("bound_nout_"+str(layerIndex)+"_"+str(nout)+".lp")       
+        if isMaxBound:
+            prob.writeLP("bound_nout_max_"+str(layerIndex)+"_"+str(nout)+".lp")
+        else:
+            prob.writeLP("bound_nout_min_"+str(layerIndex)+"_"+str(nout)+".lp")
     
     # Solve the problem using the default solver (CBC)
     prob.solve()
 
+    if prob.status == 1:
+        return value(prob.objective)
+    else:
+        if isMaxBound:
+            print("Warning in computing maxbound of "+"v_"+str(layerIndex)+"_"+str(nout)+": solver Status:", LpStatus[prob.status])        
+            prob.writeLP("bound_nout_max_"+str(layerIndex)+"_"+str(nout)+".lp")  
+            return math.inf
+        else: 
+            print("Warning in computing minbound of "+"v_"+str(layerIndex)+"_"+str(nout)+": solver Status:", LpStatus[prob.status])          
+            prob.writeLP("bound_nout_min_"+str(layerIndex)+"_"+str(nout)+".lp")  
+            return -math.inf       
+    
     # Print the status of the solved LP
     # print("Status:", LpStatus[prob.status])
 
@@ -273,4 +336,4 @@ def deriveReLuOutputBoundMLIP(isMaxBound, layerIndex, weights, bias, numberOfInp
     # Print the value of the objective
     # print("objective=", value(prob.objective))
 
-    return value(prob.objective)
+    #return value(prob.objective)

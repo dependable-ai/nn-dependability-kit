@@ -91,6 +91,8 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
                     if(isRiskReachable == False):
                         print("Risk property is not reachable (using boxed abstraction)")
                         return [], []
+                    else:  
+                        print("Risk property may be reachable (using boxed abstraction)")
                     # raise Error("Currently property are not supported")
             else:  
                 # Intermediate layer                
@@ -147,6 +149,10 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
         if bigM < np.max(np.absolute(minLinearBound[i])):
             bigM =  np.max(np.absolute(minLinearBound[i]))
     print("bigM under abs(min bound): "+ str(bigM))
+            
+    if bigM == math.inf:
+        # Just replace it by some big number (warning - this is a temporarily solution as there are bugs inside cbc LP solver)
+        bigM = 30000000
             
     # The user requested to perform analysis over the network with Octagon abstraction
     octagonBound = dict()

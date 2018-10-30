@@ -18,6 +18,7 @@ def deriveReLuOutputOctagonBound(isMaxBound, layerIndex, weights, bias, numberOf
     Raises:
     """
     
+    
     if layerIndex < 1:
         raise Error("layer index shall be smaller than X")
 
@@ -120,7 +121,24 @@ def deriveReLuOutputOctagonBound(isMaxBound, layerIndex, weights, bias, numberOf
     # prob.writeLP("test.lp")
     # Solve the problem using the default solver (CBC)
     prob.solve()
+    
+    if prob.status == 1:
+        return value(prob.objective)
+    else:
+        if isMaxBound:
+            if isDifference:
+                print("Warning in computing maxbound of "+"v_"+str(layerIndex)+"_"+str(nout1)+ "-"+"v_"+str(layerIndex)+"_"+str(nout2)+": solver Status:", LpStatus[prob.status])  
+            else:
+                print("Warning in computing maxbound of "+"v_"+str(layerIndex)+"_"+str(nout1)+ "+"+"v_"+str(layerIndex)+"_"+str(nout2)+": solver Status:", LpStatus[prob.status])
+            return math.inf
+        else: 
+            if isDifference:
+                print("Warning in computing minbound of "+"v_"+str(layerIndex)+"_"+str(nout1)+ "-"+"v_"+str(layerIndex)+"_"+str(nout2)+": solver Status:", LpStatus[prob.status])  
+            else:
+                print("Warning in computing minbound of "+"v_"+str(layerIndex)+"_"+str(nout1)+ "+"+"v_"+str(layerIndex)+"_"+str(nout2)+": solver Status:", LpStatus[prob.status])
+            return -math.inf   
+    
     # Here we would like to allow timeout in the solver, such that the solver only performs a fixed amount for it can found at best
     # prob.solve(PULP_CBC_CMD(maxSeconds=2))
 
-    return value(prob.objective)
+    #return value(prob.objective)
