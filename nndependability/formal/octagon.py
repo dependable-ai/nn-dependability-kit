@@ -1,5 +1,6 @@
 # Import PuLP modeler functions
 from pulp import *
+import math
 
 def deriveReLuOutputOctagonBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout1, nout2, bigM, minBound, maxBound, octagonBound, isDifference, inputConstraints = [], seconds = 5):
     """Derive the output difference bound for two neurons nout1 and nout2.
