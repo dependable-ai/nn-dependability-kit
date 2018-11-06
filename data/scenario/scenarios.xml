@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenarios>
+<scenario>
+  <weather>cloudy</weather>
+  <total_lanes>4</total_lanes>
+  <current_lanes>1</current_lanes>
+  <straight_curvy>curvy</straight_curvy>
+  <forward_car>False</forward_car>
+  <oncoming_car>True</oncoming_car>
+</scenario>
+<scenario>
+  <weather>rainy</weather>
+  <total_lanes>2</total_lanes>
+  <current_lanes>1</current_lanes>
+  <straight_curvy>straight</straight_curvy>
+  <forward_car>True</forward_car>
+  <oncoming_car>True</oncoming_car>
+</scenario>
+
+</scenarios>
+
+
+

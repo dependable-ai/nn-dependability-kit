@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<constraints>
+    <!-- If there exists only two lanes (one for each direction), then the current lane can only be 1 -->
+    <!-- <or-constraint>!total_lanes.2, current_lanes.1</or-constraint> -->
+    <!-- "!total_lanes.2" is equal to "total_lanes.4", so we can rewrite the constraint to a MILP form total_lanes.4 + current_lanes.1 >= 1 -->    
+    <constraint>
+        <upperbound>MAX</upperbound>
+        <lowerbound>1</lowerbound>
+        <item>1, total_lanes.4</item>
+        <item>1, current_lanes.1</item>
+    </constraint>
+</constraints>
+

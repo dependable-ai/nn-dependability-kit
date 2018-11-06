@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<discrete-scenario-description>
+  <weather>cloudy, rainy, sunny</weather>
+  <total_lanes>2, 4</total_lanes>
+  <current_lanes>1, 2</current_lanes>
+  <straight_curvy>straight, curvy</straight_curvy>
+  <forward_car>True, False</forward_car>
+  <oncoming_car>True, False</oncoming_car>
+</discrete-scenario-description>
