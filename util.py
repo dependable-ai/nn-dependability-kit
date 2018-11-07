@@ -84,12 +84,12 @@ def iterative_FGSM_attack (img, label, model):
 
 def iterative_targeted_FGSM_attack (img, label, anotherLabel, model):    
     
-    # eps = 5 * 8 / 225. 
-    eps = 1 * 8 / 225. 
+    eps = 5 * 8 / 225. 
+    #eps = 1 * 8 / 225. 
     steps = 100
     norm = float('inf')
-    # step_alpha = 0.05 
-    step_alpha = 0.01
+    step_alpha = 0.05 
+    #step_alpha = 0.01
     loss = nn.CrossEntropyLoss()
     
     x, y = Variable(img, requires_grad=True), Variable(anotherLabel)
