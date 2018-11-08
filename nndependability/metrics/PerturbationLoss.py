@@ -130,13 +130,13 @@ def add_noise(noise_typ, image):
         num_salt = np.ceil(amount * image.size * s_vs_p)
         coords = [np.random.randint(0, i - 1, int(num_salt))
               for i in image.shape]
-        out[coords] = 1
+        out[tuple(coords)] = 1
 
         # Pepper mode
         num_pepper = np.ceil(amount* image.size * (1. - s_vs_p))
         coords = [np.random.randint(0, i - 1, int(num_pepper))
               for i in image.shape]
-        out[coords] = 0
+        out[tuple(coords)] = 0
         return out
     elif noise_typ == "poisson":
         vals = len(np.unique(image))
