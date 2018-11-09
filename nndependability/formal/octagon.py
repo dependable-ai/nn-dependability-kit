@@ -121,7 +121,10 @@ def deriveReLuOutputOctagonBound(isMaxBound, layerIndex, weights, bias, numberOf
     
     # prob.writeLP("test.lp")
     # Solve the problem using the default solver (CBC)
-    prob.solve()
+    try:
+        prob.solve()
+    except: 
+        prob.solve(GLPK("/usr/local/bin/glpsol", options=["--cbg"]))
     
     if prob.status == 1:
         return value(prob.objective)

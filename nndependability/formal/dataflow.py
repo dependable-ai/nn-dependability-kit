@@ -89,7 +89,10 @@ def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInput
             prob.writeLP("bound_nout_min_"+str(layerIndex)+"_"+str(nout)+".lp")
 
     # Solve the problem using the default solver (CBC)
-    prob.solve()
+    try:
+        prob.solve()
+    except: 
+        prob.solve(GLPK("/usr/local/bin/glpsol", options=["--cbg"]))
 
     if prob.status == 1:
         return value(prob.objective)
@@ -201,7 +204,11 @@ def isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfO
         prob.writeLP("propertyOctagonAbstraction.lp")
         
     # Solve the problem using the default solver (CBC)
-    prob.solve()
+    # Solve the problem using the default solver (CBC)
+    try:
+        prob.solve()
+    except: 
+        prob.solve(GLPK("/usr/local/bin/glpsol", options=["--cbg"]))
 
     
     # Print the status of the solved LP
@@ -312,7 +319,10 @@ def deriveReLuOutputBoundMILP(isMaxBound, layerIndex, weights, bias, numberOfInp
             prob.writeLP("bound_nout_min_"+str(layerIndex)+"_"+str(nout)+".lp")
     
     # Solve the problem using the default solver (CBC)
-    prob.solve()
+    try:
+        prob.solve()
+    except: 
+        prob.solve(GLPK("/usr/local/bin/glpsol", options=["--cbg"]))
 
     if prob.status == 1:
         return value(prob.objective)
