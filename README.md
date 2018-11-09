@@ -11,7 +11,7 @@ GNU Affero General Public License (AGPL) Version 3
 Examples are presented as jupyter notebooks to allow step-by-step understanding over the concepts. 
 
 - [Formal verification] TargetVehicleProcessingNetwork_FormalVerification.ipynb
-- [Metrics & test case generation] GTSRB_Neuron2ProjectionCoverage_TestGen.ipynb, or MNIST_Neuron2ProjectionCoverage_TestGen.ipynb, or SSD_InterpretationPrecision.ipynb
+- [Metrics & test case generation] GTSRB_Neuron2ProjectionCoverage_TestGen.ipynb, or GTSRB_AdditionalMetrics.ipynb, or MNIST_Neuron2ProjectionCoverage_TestGen.ipynb, or SSD_InterpretationPrecision.ipynb
 - [Runtime verification] GTSRB_RuntimeMonitoring.ipynb, or MNIST_RuntimeMonitoring.ipynb  
 
 ## Structure
