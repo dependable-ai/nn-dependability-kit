@@ -34,10 +34,18 @@ def solveCP(lpConstraint):
     objective.SetMaximization()        
             
     """Solve the problem and print the solution."""
+    
+    solver.SetTimeLimit(10000)
     result_status = solver.Solve()
     # The problem has an optimal solution.
-    assert result_status == pywraplp.Solver.OPTIMAL
-
+    if result_status == pywraplp.Solver.OPTIMAL:
+        print("Optimal solution found")
+    elif result_status == pywraplp.Solver.FEASIBLE:
+        print("Timeout but feasible solution found in 10 seconds")
+    else: 
+        print(result_status)
+        raise Error("The solver can not find optimal or feasible solution within time bound in 10 seconds") 
+    
     # The solution looks legit (when using solvers other than
     assert solver.VerifySolution(1e-7, True)
 
