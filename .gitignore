@@ -4,6 +4,7 @@ data/*
 !data/frontcardetection
 !data/scenario
 !data/VOC_examples
+!data/kitti
 local
 bound_nout_min_1_0.lp
 bound_nout_min_2_0.lp

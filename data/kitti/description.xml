@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<discrete-scenario-description>
+    <ego_vn>-3,-2,-1,0,1,2,3</ego_vn>
+    <ego_ve>-3,-2,-1,0,1,2,3</ego_ve>
+    <ego_ax>-3,-2,-1,0,1,2,3</ego_ax>
+    <ego_ay>-3,-2,-1,0,1,2,3</ego_ay>
+    <left_box_existence>True, False</left_box_existence>
+    <left_box_rotation>0,1,2,3,4,5,6,7</left_box_rotation>
+    <left_box_type>Car, Van, Truck, Pedestrian, Person_sitting, Cyclist, Tram, Misc, DontCare</left_box_type>
+    <left_box_occlusion>0,1,2,3</left_box_occlusion>
+    <right_box_existence>True, False</right_box_existence>
+    <right_box_rotation>0,1,2,3,4,5,6,7</right_box_rotation>
+    <right_box_type>Car, Van, Truck, Pedestrian, Person_sitting, Cyclist, Tram, Misc, DontCare</right_box_type>
+    <right_box_occlusion>0,1,2,3</right_box_occlusion>
+    <closest_box_1_existence>True, False</closest_box_1_existence>
+    <closest_box_1_rotation>0,1,2,3,4,5,6,7</closest_box_1_rotation>
+    <closest_box_1_type>Car, Van, Truck, Pedestrian, Person_sitting, Cyclist, Tram, Misc, DontCare</closest_box_1_type>
+    <closest_box_1_occlusion>0,1,2,3</closest_box_1_occlusion>
+    <closest_box_2_existence>True, False</closest_box_2_existence>
+    <closest_box_2_rotation>0,1,2,3,4,5,6,7</closest_box_2_rotation>
+    <closest_box_2_type>Car, Van, Truck, Pedestrian, Person_sitting, Cyclist, Tram, Misc, DontCare</closest_box_2_type>
+    <closest_box_2_occlusion>0,1,2,3</closest_box_2_occlusion>
+</discrete-scenario-description>
