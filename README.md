@@ -6,12 +6,12 @@ nn-dependability kit is a research prototype to assist engineering neural networ
 
 GNU Affero General Public License (AGPL) Version 3
 
-## Trying the tool
+## Try the tool
 
 Examples are presented as jupyter notebooks to allow step-by-step understanding over the concepts. 
 
 - [Formal verification] TargetVehicleProcessingNetwork_FormalVerification.ipynb
-- [Metrics & test case generation] GTSRB_Neuron2ProjectionCoverage_TestGen.ipynb, or GTSRB_AdditionalMetrics.ipynb, or MNIST_Neuron2ProjectionCoverage_TestGen.ipynb, or SSD_InterpretationPrecision.ipynb
+- [Metrics & test case generation] GTSRB_Neuron2ProjectionCoverage_TestGen.ipynb, or GTSRB_AdditionalMetrics.ipynb, or KITTI_Scenario_Coverage.ipynb, or MNIST_Neuron2ProjectionCoverage_TestGen.ipynb, or SSD_InterpretationPrecision.ipynb
 - [Runtime verification] GTSRB_RuntimeMonitoring.ipynb, or MNIST_RuntimeMonitoring.ipynb  
 
 ## Structure
