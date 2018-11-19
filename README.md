@@ -2,6 +2,9 @@
 
 nn-dependability kit is a research prototype to assist engineering neural networks for safety-critical domains. 
 
+> C.-H. Cheng, C.-H. Huang, and G. Nührenberg. *nn-dependability-kit: Engineering Neural Networks for Safety-Critical Systems*.
+https://arxiv.org/abs/1811.06746
+
 ## License
 
 GNU Affero General Public License (AGPL) Version 3
