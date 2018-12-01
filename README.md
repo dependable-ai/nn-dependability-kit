@@ -31,7 +31,6 @@ There are four packages under nndependability, namely
 - [Test case generation] Google optimization research tools (https://developers.google.com/optimization/introduction/installing/binary)
 - [Verification / static analysis] PuLP (python-based MILP connector to CBC and other solvers)
     - [For Ubuntu users] CBC solver pre-shipped with PuLP may crash in solving some problems. Therefore, please additionally install [GNU GLPK](http://www.gnu.org/software/glpk/). The static analysis engine assumes that the GLPK solver is installed in the default directory "/usr/local/bin/glpsol". Whenever CBC crashes, GLPK is automatically triggered as a replacement.
-    - [Scalability & specification issues] See final section for our suggestions
 - [Run-time verification] dd (binary decision diagram implemented using python)
 
 ## Related publications
