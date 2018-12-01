@@ -40,7 +40,7 @@ def prepareLPconstraint(metric):
     # kValue, numberOfNeuronsToTrack, k_Activation_record
     
     if not (type(metric) == ScenarioKProjection.Scenario_KProjection_Metric):
-        raise Error("The method only takes input with type Scenario_KProjection_Metric")
+        raise TypeError("The method only takes input with type Scenario_KProjection_Metric")
     
        
     lpConstraint = milp.TestCaseGenConstraint()

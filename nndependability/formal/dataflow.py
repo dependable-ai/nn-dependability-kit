@@ -23,7 +23,7 @@ def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInput
     """
 
     if layerIndex < 1:
-        raise Error("layer index shall be smaller than X")
+        raise ValueError("layer index shall be smaller than X")
 
     # A new LP problem
     prob = None
@@ -138,7 +138,7 @@ def isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfO
     """
 
     if layerIndex < 1:
-        raise Error("layer index shall be smaller than X")
+        raise ValueError("layer index shall be smaller than X")
     if len(riskProperty) == 0:
         print("Safety property trivially hold")
     
@@ -253,7 +253,7 @@ def deriveReLuOutputBoundMILP(isMaxBound, layerIndex, weights, bias, numberOfInp
     """
     
     if layerIndex < 1:
-        raise Error("layer index shall be smaller than X")
+        raise ValueError("layer index shall be smaller than X")
 
     # A new LP problem
     prob = None

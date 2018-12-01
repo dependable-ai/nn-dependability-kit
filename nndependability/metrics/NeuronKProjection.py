@@ -20,7 +20,7 @@ class Neuron_OnOff_KProjection_Metric():
     def __init__(self, kValue, numberOfNeuronsToTrack):
             
         if not ((kValue == 1 or kValue == 2) or kValue == 3):
-            raise Exception('for k-projection coverage where k > 3, it is not supported')
+            raise NotImplementedError('for k-projection coverage where k > 3, it is not supported')
             
         self.kValue = kValue
         self.numberOfNeuronsToTrack = numberOfNeuronsToTrack        

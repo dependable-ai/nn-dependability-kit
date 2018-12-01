@@ -44,7 +44,7 @@ def solveCP(lpConstraint):
         print("Timeout but feasible solution found in 10 seconds")
     else: 
         print(result_status)
-        raise Error("The solver can not find optimal or feasible solution within time bound in 10 seconds") 
+        raise Exception("The solver can not find optimal or feasible solution within time bound in 10 seconds") 
     
     # The solution looks legit (when using solvers other than
     assert solver.VerifySolution(1e-7, True)

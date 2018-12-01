@@ -34,7 +34,7 @@ def prepareLPconstraint(metric):
     # kValue, numberOfNeuronsToTrack, k_Activation_record
     
     if not (type(metric) == NeuronKProjection.Neuron_OnOff_KProjection_Metric):
-        raise Error("The method only takes input with type Neuron_OnOff_KProjection_Metric")
+        raise TypeError("The method only takes input with type Neuron_OnOff_KProjection_Metric")
     
     if metric.kValue != 2:
         raise NotImplementedError("The method does not support cases where k != 2")

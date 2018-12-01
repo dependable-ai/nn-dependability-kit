@@ -93,7 +93,7 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
                         return [], []
                     else:  
                         print("Risk property may be reachable (using boxed abstraction)")
-                    # raise Error("Currently property are not supported")
+                    # raise Exception("Currently property are not supported")
             else:  
                 # Intermediate layer                
                 for i in range(numberOfOutputs):

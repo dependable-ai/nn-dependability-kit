@@ -52,7 +52,7 @@ def evaluateImageAndComputeSoftmax(net, image, label):
 
 def add_weather(image, weather_typ):
     if not (image.ndim == 3 and image.shape[2] == 3):
-        raise Exception("Dimension should be (length x widthx 3)")
+        raise Exception("Dimension should be (length x width x 3)")
 
     if weather_typ == "snow":
         imageInt = np.rint((image*255))

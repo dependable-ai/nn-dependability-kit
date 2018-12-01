@@ -47,7 +47,7 @@ class Scenario_KProjection_Metric():
         for child in root:
                
             if child.tag != "scenario":
-                raise Error("Error in parsing the XML")
+                raise Exception("Error in parsing the XML")
                 
             scenario = [-1] * len(self.sd.operatingConditionCriteria)
             for subchild in child:
@@ -226,7 +226,7 @@ class ProjectionRecord():
                         # FIXME: Change below value from 1 to others when quantitative projection is required.
                         self.maxOccupiedEntities[str(i)+"_"+str(j)+"_"+str(k)] = 1
         else:
-            raise Error("Currently k>3 is not supported")
+            raise Exception("Currently k>3 is not supported")
 
             
 class ScenarioDescription():       
@@ -247,7 +247,7 @@ class ScenarioDescription():
        
         for key, value in self.operatingConditionItems.items():
             if len(value) >= 10:
-                raise Error("Currently the system is not able to process a condition with more than 10 elements due to internal string processing")
+                raise Exception("Currently the system is not able to process a condition with more than 10 elements due to internal string processing")
        
     def printScenarioDescription(self):
         print(str(self.operatingConditionCriteria))
@@ -269,7 +269,7 @@ class DomainRestrictions():
         for child in root:
                
             if child.tag != "constraint":
-                raise Error("Error in parsing the XML")
+                raise Exception("Error in parsing the XML")
                 
             ex = milp.Expression()    
             
@@ -299,7 +299,7 @@ class DomainRestrictions():
                     ex.coefficients.append(coefficient)
                     
                 else:
-                    raise Error("Error in parsing the XML")
+                    raise Exception("Error in parsing the XML")
 
             ex.printExpression()
             self.domainRestrictions.append(ex)       

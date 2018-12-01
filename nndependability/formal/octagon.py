@@ -21,7 +21,7 @@ def deriveReLuOutputOctagonBound(isMaxBound, layerIndex, weights, bias, numberOf
     
     
     if layerIndex < 1:
-        raise Error("layer index shall be smaller than X")
+        raise ValueError("layer index shall be smaller than X")
 
     # A new LP problem
     prob = None

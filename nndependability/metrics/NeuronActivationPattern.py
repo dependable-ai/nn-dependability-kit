@@ -50,7 +50,7 @@ class Neuron_Activation_Pattern_Metric():
         
         # Basic data sanity check
         if not (len(neuronOnOffPattern) == self.numberOfNeurons):            
-            raise IndexError('Neuron pattern size is not the same as the number of neurons being monitored')
+            raise ValueError('Neuron pattern size is not the same as the number of neurons being monitored')
         
 
         numberOfOn = 0
