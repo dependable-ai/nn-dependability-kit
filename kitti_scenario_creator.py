@@ -2,8 +2,15 @@ import xml.etree.ElementTree as ET
 import os
 import math
 
+
+dirOxts = "data/kitti/oxts"
+xmlTracklet = "data/kitti/tracklet_labels.xml"
+resultXML = "data/kitti/new_scenarios.xml"
+
 MAX_V = 10
 MAX_A = 3
+SCALE_V = 3
+SCALE_A = 3
 
 class myObj(object):
     pass
@@ -15,23 +22,21 @@ def disRotate(radius):
     return math.floor(comp*6/math.pi)
 
 def disVelocity(velocity):
-    disV = math.floor(velocity/MAX_V*5)
-    if disV >= 5:
-        return 5
-    if disV <= -5:
-        return -5
+    disV = math.floor(velocity/MAX_V*SCALE_V)
+    if disV >= SCALE_V:
+        return SCALE_V
+    if disV <= -1 * SCALE_V:
+        return -1 * SCALE_V
     return disV
 
 def disAcceleration(acceleration):
-    disA = math.floor(acceleration/MAX_A*5)
-    if disA >= 5:
-        return 5
-    if disA <= -5:
-        return -5
+    disA = math.floor(acceleration/MAX_A*SCALE_A)
+    if disA >= SCALE_A:
+        return SCALE_A
+    if disA <= -1 * SCALE_A:
+        return -1 * SCALE_A
     return disA
 
-dirOxts = "oxts"
-xmlTracklet = "tracklet_labels.xml"
 
 lbObjs = ET.parse(xmlTracklet)
 rootObjs = lbObjs.getroot()
@@ -102,7 +107,6 @@ for root,dirs,files in os.walk(dirOxts):
         f.close()
 
 # dumpxml
-xml = open("result.xml","w")
 scenarios = ET.Element("scenarios")
 
 i = 0
@@ -222,5 +226,4 @@ while i < countObjs:
 
 tree = ET.ElementTree()
 tree._setroot(scenarios)
-tree.write("aaa.xml")
-xml.close()
+tree.write(resultXML)
