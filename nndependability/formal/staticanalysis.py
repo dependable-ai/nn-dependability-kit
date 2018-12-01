@@ -1,6 +1,6 @@
 from . import dataflow
 from . import octagon
-from ..basic import netreader
+from ..basic import pytorchreader
 from ..basic import neuralnet
 
 import numpy as np
@@ -12,7 +12,7 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
 
     if isinstance(net, nn.Module):
         # Translate from Pytorch to internal format
-        net = netreader.loadMlpFromPytorch(net)
+        net = pytorchreader.loadMlpFromPytorch(net)
     
     minBound = dict()
     maxBound = dict()

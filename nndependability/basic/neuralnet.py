@@ -50,6 +50,7 @@ class NeuralNetwork():
         layer["type"] = "elu"
         layer["weights"] = weights
         layer["bias"] = bias
+        layer["alpha"] = alpha
         self.layers.append(layer)    
         return
 
@@ -60,14 +61,30 @@ class NeuralNetwork():
         """
         
         for layerIndex in range(len(self.layers)):
-            if self.layers[layerIndex]["type"]=="BN":
-                raise NotImplementedError
-        
-            if layerIndex > 0:
-                # Check against previous layer
-                if self.layers[layerIndex]["weights"].shape[1] != self.layers[layerIndex-1]["weights"].shape[0]:
-                    raise Exception("Inconsistent dimension between layer "+str(layerIndex)+" and its previous layer")
-        
+            if self.layers[layerIndex]["type"] == "BN":
+                if not (self.layers[layerIndex]["moving_mean"].shape[0] == self.layers[layerIndex]["moving_variance"].shape[0] and 
+                            self.layers[layerIndex]["moving_mean"].shape[0] == self.layers[layerIndex]["gamma"].shape[0] and
+                            self.layers[layerIndex]["moving_mean"].shape[0] == self.layers[layerIndex]["beta"].shape[0]): 
+                    raise Exception("Inconsistent dimension for parameters in BN layer "+str(layerIndex))
+                    
+                if(self.layers[layerIndex]["moving_mean"].shape[0] != self.layers[layerIndex-1]["weights"].shape[0] ):
+                    print(self.layers[layerIndex]["moving_mean"].shape[0])
+                    print(self.layers[layerIndex-1]["weights"].shape[0])
+                    raise Exception("Inconsistent dimension between BN layer "+str(layerIndex)+" and its previous layer")
+            else: 
+                if layerIndex > 0:
+                    # Check against previous layer
+                    if(self.layers[layerIndex-1]["type"] == "BN"):
+                        if self.layers[layerIndex]["weights"].shape[1] != self.layers[layerIndex-1]["beta"].shape[0]:
+                            print(self.layers[layerIndex]["weights"].shape)
+                            print(self.layers[layerIndex-1]["beta"].shape)
+                            raise Exception("Inconsistent dimension between layer "+str(layerIndex)+" and its previous layer")
+                    else: 
+                        if self.layers[layerIndex]["weights"].shape[1] != self.layers[layerIndex-1]["weights"].shape[0]:
+                            print(self.layers[layerIndex]["weights"].shape)
+                            print(self.layers[layerIndex-1]["weights"].shape)
+                            raise Exception("Inconsistent dimension between layer "+str(layerIndex)+" and its previous layer")
+            
         print("Finish checking - dimension OK!")
         return 
                     
