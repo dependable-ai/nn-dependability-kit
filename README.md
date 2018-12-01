@@ -13,8 +13,8 @@ GNU Affero General Public License (AGPL) Version 3
 
 Examples are presented as jupyter notebooks to allow step-by-step understanding over the concepts. 
 
-- [Formal verification] TargetVehicleProcessingNetwork_FormalVerification.ipynb
 - [Metrics & test case generation] GTSRB_Neuron2ProjectionCoverage_TestGen.ipynb, or GTSRB_AdditionalMetrics.ipynb, or KITTI_Scenario_Coverage.ipynb, or MNIST_Neuron2ProjectionCoverage_TestGen.ipynb, or SSD_InterpretationPrecision.ipynb
+- [Formal verification] TargetVehicleProcessingNetwork_FormalVerification.ipynb
 - [Runtime verification] GTSRB_RuntimeMonitoring.ipynb, or MNIST_RuntimeMonitoring.ipynb  
 
 ## Structure
@@ -86,6 +86,6 @@ In nn-dependability-kit, we advise users to proceed with following steps.
 
 <img src="img/VerificationStrategy.png" alt="drawing" width="600"/>
 
-* As inputs to the complete network may only lead to certain values for the input of the yellow network, if the safety property cannot be proven on the yellow network, our further recommendation is to *feed the complete network with training data, in order to derive an tighter over-approximation of inputs* for the yellow network. An example can be found in neuron n^17_{1}, where by running the network with all available training data, we know that the training data makes the output of n^17_{1} bounded by [-0.1, 0.6]. We can thus use the recorded bound as input constraints for the yellow network to perform formal verification. 
+* As inputs to the complete network may only lead to certain values for the input of the yellow network, if the safety property cannot be proven on the yellow network, our further recommendation is to **feed the complete network with training data, in order to derive an tighter over-approximation based on visited inputs** for the yellow network. An example can be found in neuron n^17_{1}, where by running the network with all available training data, we know that the training data makes the output of n^17_{1} bounded by [-0.1, 0.6]. We can thus use the recorded bound as input constraints for the yellow network to perform formal verification. 
 
 * The correctness of the verification is based on an assumption that it is impossible to have neuron values sitting outside the created interval, which is an **assume-guarantee** proof. The assumption can be easily monitored in runtime. 
