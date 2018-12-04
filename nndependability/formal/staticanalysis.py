@@ -40,7 +40,7 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
                 for i in range(numberOfOutputs):
                     
                     min = pool.apply_async(dataflow.deriveReLuOutputBound, (False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints))
-                    max = pool.apply_async(dataflow.deriveReLuOutputBound, (True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints)        )
+                    max = pool.apply_async(dataflow.deriveReLuOutputBound, (True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints))
                     minBound[layerIndex][i] = min.get()
                     maxBound[layerIndex][i] = max.get()
                     #minBound[layerIndex][i] = dataflow.deriveReLuOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints)
@@ -136,7 +136,15 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
                 if layerIndex == 1:
                     # For the first layer, the input constraint is taken from parameters
                     inputConstraintForThisLayer = inputConstraints
-                    
+                
+                if layerIndex > 1:
+                    print("  (constraint shape x_{i}: ", end='')
+                    for i in range(numberOfOutputs):                
+                        min = pool.apply_async(dataflow.deriveReLuOutputBound, (False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraintForThisLayer, octagonBound[layerIndex -1]))
+                        max = pool.apply_async(dataflow.deriveReLuOutputBound, (True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraintForThisLayer, octagonBound[layerIndex -1]))
+                        minBound[layerIndex][i] = min.get()
+                        maxBound[layerIndex][i] = max.get()
+                
                 if isAvoidQuadraticConstraints == False:
                     for i in range(numberOfOutputs):
                         print("\t["+str(i)+"]: ", end='')
