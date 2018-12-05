@@ -139,12 +139,14 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
                 
                 if layerIndex > 1:
                     print("  (constraint shape x_{i}: ", end='')
-                    for i in range(numberOfOutputs):                
+                    for i in range(numberOfOutputs):   
+                        if(i%5==0):
+                            print(str(i)+"," , end='')                    
                         min = pool.apply_async(dataflow.deriveReLuOutputBound, (False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraintForThisLayer, octagonBound[layerIndex -1]))
                         max = pool.apply_async(dataflow.deriveReLuOutputBound, (True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraintForThisLayer, octagonBound[layerIndex -1]))
                         minBound[layerIndex][i] = min.get()
                         maxBound[layerIndex][i] = max.get()
-                
+                    print()
                 if isAvoidQuadraticConstraints == False:
                     for i in range(numberOfOutputs):
                         print("\t["+str(i)+"]: ", end='')
@@ -156,7 +158,7 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
                                 min1 = pool.apply_async(octagon.deriveReLuOutputOctagonBound, (False, layerIndex, weights, bias, numberOfInputs, i, j, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], True, inputConstraintForThisLayer))
                                 max1 = pool.apply_async(octagon.deriveReLuOutputOctagonBound, (True, layerIndex, weights, bias, numberOfInputs, i, j, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], True, inputConstraintForThisLayer))                                
                                 minimumValue1 = min1.get()
-                                maximumValue1 = max2.get()                                 
+                                maximumValue1 = max1.get()                                 
                                 #minimumValue1 = octagon.deriveReLuOutputOctagonBound(False, layerIndex, weights, bias, numberOfInputs, i, j, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], True, inputConstraintForThisLayer)
                                 #maximumValue2 = octagon.deriveReLuOutputOctagonBound(True, layerIndex, weights, bias, numberOfInputs, i, j, bigM,  minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], True, inputConstraintForThisLayer)        
                                 min2 = pool.apply_async(octagon.deriveReLuOutputOctagonBound, (False, layerIndex, weights, bias, numberOfInputs, i, j, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], octagonBound[layerIndex -1], False, inputConstraintForThisLayer))
