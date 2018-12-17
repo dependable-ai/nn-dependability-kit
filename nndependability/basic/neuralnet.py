@@ -35,17 +35,18 @@ class NeuralNetwork():
         self.layers.append(layer)
         return
 
-    def addBatchNormLayer(self, moving_mean, moving_variance, gamma, beta):       
+    def addBatchNormLayer(self, moving_mean, moving_variance, gamma, beta, epsilon = 0.001):       
         layer = {}
         layer["type"] = "BN"
         layer["moving_mean"] = moving_mean
         layer["moving_variance"] = moving_variance
         layer["gamma"] = gamma  
-        layer["beta"] = beta          
+        layer["beta"] = beta 
+        layer["epsilon"] = epsilon
         self.layers.append(layer)
         return
      
-    def addELULayer(self, weights, bias, alpha):       
+    def addELULayer(self, weights, bias, alpha=1):       
         layer = {}
         layer["type"] = "elu"
         layer["weights"] = weights
@@ -61,14 +62,13 @@ class NeuralNetwork():
         """
         
         for layerIndex in range(len(self.layers)):
+
             if self.layers[layerIndex]["type"] == "BN":
-                if not (self.layers[layerIndex]["moving_mean"].shape[0] == self.layers[layerIndex]["moving_variance"].shape[0] and 
-                            self.layers[layerIndex]["moving_mean"].shape[0] == self.layers[layerIndex]["gamma"].shape[0] and
-                            self.layers[layerIndex]["moving_mean"].shape[0] == self.layers[layerIndex]["beta"].shape[0]): 
+                if not ( self.layers[layerIndex]["gamma"].shape[0] == self.layers[layerIndex]["beta"].shape[0]): 
                     raise Exception("Inconsistent dimension for parameters in BN layer "+str(layerIndex))
                     
-                if(self.layers[layerIndex]["moving_mean"].shape[0] != self.layers[layerIndex-1]["weights"].shape[0] ):
-                    print(self.layers[layerIndex]["moving_mean"].shape[0])
+                if(self.layers[layerIndex]["gamma"].shape[0] != self.layers[layerIndex-1]["weights"].shape[0] ):
+                    print(self.layers[layerIndex]["gamma"].shape[0])
                     print(self.layers[layerIndex-1]["weights"].shape[0])
                     raise Exception("Inconsistent dimension between BN layer "+str(layerIndex)+" and its previous layer")
             else: 

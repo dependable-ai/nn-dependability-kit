@@ -25,57 +25,126 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
     with Pool(processes=numberOfProcesses) as pool:
         for layerIndex in range(1, len(net.layers)+1):
             print("[Boxed abstraction] Processing layer "+str(layerIndex))
-            # in neuralnet.py for storing weights, the index starts with 0
-            weights = net.layers[layerIndex-1]["weights"]
-            bias = net.layers[layerIndex-1]["bias"]
-        
-            numberOfOutputs = weights.shape[0]
-            numberOfInputs = weights.shape[1]
-
+            
+            numberOfOutputs = 0
+            numberOfInputs = 0
+            
+            # in neuralnet.py for storing weights, the index starts with 0, so we need to do "layerIndex - 1"
+            if ((net.layers[layerIndex-1]["type"] == "relu" or net.layers[layerIndex-1]["type"] == "elu") or net.layers[layerIndex-1]["type"] == "linear"): 
+                    numberOfOutputs = net.layers[layerIndex-1]["weights"].shape[0]
+                    numberOfInputs = net.layers[layerIndex-1]["weights"].shape[1]
+            elif net.layers[layerIndex-1]["type"] == "BN":
+                # Take the previous layer output (assume that it is ReLu or Elu) as its input dimension
+                numberOfInputs = net.layers[layerIndex-2]["weights"].shape[0]
+                numberOfOutputs = net.layers[layerIndex-2]["weights"].shape[0]
+            else:
+                raise NotImplementedError("Currently layers beyond relu, elu, linear, BN are not supported")
+            
             minBound[layerIndex] = np.zeros(numberOfOutputs)
             maxBound[layerIndex] = np.zeros(numberOfOutputs)
         
             if layerIndex == 1:
-                # Input layer
-                for i in range(numberOfOutputs):
+               # Input layer
+                
+                if net.layers[layerIndex-1]["type"] == "relu": 
                     
-                    min = pool.apply_async(dataflow.deriveReLuOutputBound, (False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints))
-                    max = pool.apply_async(dataflow.deriveReLuOutputBound, (True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints))
-                    minBound[layerIndex][i] = min.get()
-                    maxBound[layerIndex][i] = max.get()
-                    #minBound[layerIndex][i] = dataflow.deriveReLuOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints)
-                    #maxBound[layerIndex][i] = dataflow.deriveReLuOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints)        
+                    weights = net.layers[layerIndex-1]["weights"]
+                    bias = net.layers[layerIndex-1]["bias"]
+ 
+                    for i in range(numberOfOutputs):
+                        
+                        min = pool.apply_async(dataflow.deriveReLuOutputBound, (False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints))
+                        max = pool.apply_async(dataflow.deriveReLuOutputBound, (True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints))
+                        minBound[layerIndex][i] = min.get()
+                        maxBound[layerIndex][i] = max.get()
+                        #minBound[layerIndex][i] = dataflow.deriveReLuOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints)
+                        #maxBound[layerIndex][i] = dataflow.deriveReLuOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints)        
 
+                if net.layers[layerIndex-1]["type"] == "elu": 
+                    # in neuralnet.py for storing weights, the index starts with 0
+                    weights = net.layers[layerIndex-1]["weights"]
+                    bias = net.layers[layerIndex-1]["bias"]
+ 
+                    for i in range(numberOfOutputs):
+                        
+                        min = pool.apply_async(dataflow.deriveELuOutputBound, (False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints))
+                        max = pool.apply_async(dataflow.deriveELuOutputBound, (True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints))
+                        minBound[layerIndex][i] = min.get()
+                        maxBound[layerIndex][i] = max.get()
+                        #minBound[layerIndex][i] = dataflow.deriveReLuOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints)
+                        #maxBound[layerIndex][i] = dataflow.deriveReLuOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1], inputConstraints)        
+                        
+                        
             elif layerIndex == len(net.layers):
                 # Output layer
-                if len(riskProperty) == 0:
-                    # Compute output bounds
-                    for i in range(numberOfOutputs):
-                        min = pool.apply_async(dataflow.deriveLinearOutputBound, (False, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1]))
-                        max = pool.apply_async(dataflow.deriveLinearOutputBound, (True, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1]))
-                        minBound[layerIndex][i] = min.get()
-                        maxBound[layerIndex][i] = max.get()        
-                        #minBound[layerIndex][i] = dataflow.deriveLinearOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1])
-                        #maxBound[layerIndex][i] = dataflow.deriveLinearOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1])        
+                if net.layers[layerIndex-1]["type"] == "linear": 
+                
+                    weights = net.layers[layerIndex-1]["weights"]
+                    bias = net.layers[layerIndex-1]["bias"]
+                    
+                    if len(riskProperty) == 0:
+                        # Compute output bounds
+                        for i in range(numberOfOutputs):
+                            min = pool.apply_async(dataflow.deriveLinearOutputBound, (False, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1]))
+                            max = pool.apply_async(dataflow.deriveLinearOutputBound, (True, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1]))
+                            minBound[layerIndex][i] = min.get()
+                            maxBound[layerIndex][i] = max.get()        
+                            #minBound[layerIndex][i] = dataflow.deriveLinearOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1])
+                            #maxBound[layerIndex][i] = dataflow.deriveLinearOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, i, minBound[layerIndex -1], maxBound[layerIndex -1])        
 
+                    else:
+                        # Check if the property can be violated
+                        isRiskReachable = dataflow.isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfOutputs, minBound[layerIndex -1], maxBound[layerIndex -1], [], riskProperty)        
+                        if(isRiskReachable == False):
+                            print("Risk property is not reachable (using boxed abstraction)")
+                            return [], []
+                        else:  
+                            print("Risk property may be reachable (using boxed abstraction)")
+                        # raise Exception("Currently property are not supported")
                 else:
-                    # Check if the property can be violated
-                    isRiskReachable = dataflow.isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfOutputs, minBound[layerIndex -1], maxBound[layerIndex -1], [], riskProperty)        
-                    if(isRiskReachable == False):
-                        print("Risk property is not reachable (using boxed abstraction)")
-                        return [], []
-                    else:  
-                        print("Risk property may be reachable (using boxed abstraction)")
-                    # raise Exception("Currently property are not supported")
+                    raise NotImplementedError("Currently output layer beyond linear is not supported")
+                
             else:
-                # Intermediate layer
-                for i in range(numberOfOutputs):
-                    min = pool.apply_async(dataflow.deriveReLuOutputBound, (False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1]))
-                    max = pool.apply_async(dataflow.deriveReLuOutputBound, (True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1]))
-                    minBound[layerIndex][i] = min.get()
-                    maxBound[layerIndex][i] = max.get() 
-                    #minBound[layerIndex][i] = dataflow.deriveReLuOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1])
-                    #maxBound[layerIndex][i] = dataflow.deriveReLuOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1])        
+            
+                if net.layers[layerIndex-1]["type"] == "relu": 
+                    weights = net.layers[layerIndex-1]["weights"]
+                    bias = net.layers[layerIndex-1]["bias"]
+                    # Intermediate layer
+                    for i in range(numberOfOutputs):
+                        min = pool.apply_async(dataflow.deriveReLuOutputBound, (False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1]))
+                        max = pool.apply_async(dataflow.deriveReLuOutputBound, (True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1]))
+                        minBound[layerIndex][i] = min.get()
+                        maxBound[layerIndex][i] = max.get() 
+                        #minBound[layerIndex][i] = dataflow.deriveReLuOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1])
+                        #maxBound[layerIndex][i] = dataflow.deriveReLuOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1])        
+                
+                elif net.layers[layerIndex-1]["type"] == "BN": 
+                    
+                    moving_mean = net.layers[layerIndex-1]["moving_mean"]
+                    moving_variance = net.layers[layerIndex-1]["moving_variance"]
+                    epsilon = net.layers[layerIndex-1]["epsilon"]                    
+                    gamma = net.layers[layerIndex-1]["gamma"]
+                    beta = net.layers[layerIndex-1]["beta"]     
+                    
+                    for i in range(numberOfOutputs):
+
+                        minBound[layerIndex][i] = dataflow.deriveBNOutputBound(False, i, minBound[layerIndex -1], maxBound[layerIndex -1], moving_mean, moving_variance, gamma, beta, epsilon)
+                        maxBound[layerIndex][i] = dataflow.deriveBNOutputBound(True, i, minBound[layerIndex -1], maxBound[layerIndex -1], moving_mean, moving_variance, gamma, beta, epsilon)        
+                
+                elif net.layers[layerIndex-1]["type"] == "elu": 
+                    weights = net.layers[layerIndex-1]["weights"]
+                    bias = net.layers[layerIndex-1]["bias"]
+                    # Intermediate layer
+                    for i in range(numberOfOutputs):
+                        min = pool.apply_async(dataflow.deriveELuOutputBound, (False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1]))
+                        max = pool.apply_async(dataflow.deriveELuOutputBound, (True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1]))
+                        minBound[layerIndex][i] = min.get()
+                        maxBound[layerIndex][i] = max.get() 
+                        #minBound[layerIndex][i] = dataflow.deriveReLuOutputBound(False, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1])
+                        #maxBound[layerIndex][i] = dataflow.deriveReLuOutputBound(True, layerIndex, weights[i], bias[i], numberOfInputs, i, bigM, minBound[layerIndex -1], maxBound[layerIndex -1])        
+        
+                else:
+                    raise NotImplementedError("Currently intermediate layers beyond ReLU, BN, and ELu are not supported")
 
         if(isUsingBox):
             print("Completed\n\n")
@@ -120,7 +189,7 @@ def verify(inputMinBound, inputMaxBound, net, isUsingBox = True, inputConstraint
         
         for layerIndex in range(1, len(net.layers)+1):
 
-            # in neuralnet.py for storing weights, the index starts with 0
+            # in neuralnet.py for storing weights, the index starts with 0, so we use "layerIndex-1"
             weights = net.layers[layerIndex-1]["weights"]
             bias = net.layers[layerIndex-1]["bias"]
         

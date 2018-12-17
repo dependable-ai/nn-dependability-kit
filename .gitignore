@@ -6,12 +6,7 @@ data/*
 !data/VOC_examples
 !data/kitti
 local
-bound_nout_min_1_0.lp
-bound_nout_min_2_0.lp
-bound_nout_min_3_0.lp
-bound_nout_max_1_0.lp
-bound_nout_max_2_0.lp
-bound_nout_max_3_0.lp
+bound_nout_*.lp
 propertyBoxedAbstraction.lp
-
+Exp*.ipynb
 nndependability/metrics/saliency

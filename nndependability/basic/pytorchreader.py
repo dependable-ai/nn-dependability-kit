@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import numpy as np
 
 from . import neuralnet
 
@@ -83,7 +84,24 @@ def loadMlpFromPytorch(net, layersNamesToBeExtracted = [], layerTypes = []):
                     raise Exception("Unknown layer type")
                     
             else:
-                raise NotImplementedError("Encountered BN")
+                weights = None
+                bias = None
+                for name, param in net.named_parameters():
+                    if name == layersNamesToBeExtracted[layerIndex]+".weight":
+                        weights = param.detach().numpy()
+                        
+                for name, param in net.named_parameters():
+                    if name == layersNamesToBeExtracted[layerIndex]+".bias":
+                        bias = param.detach().numpy()
+                
+                # Moving mean and moving variance can't be accessed from named_parameters.
+                # FIXME: Change the below code by accessing the moving mean and moving variance of the network.
+                movingMean = 0
+                movingVar = 1
+                epsilon = 0.00001
+                nNet.addBatchNormLayer(movingMean, movingVar, weights, bias)
+                #raise NotImplementedError("Encountered BN whose implementation is still WiP")
+                
                 
         nNet.checkConsistency()
         return nNet
