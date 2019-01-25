@@ -1,6 +1,6 @@
 # nn-dependability-kit
 
-nn-dependability kit is a research prototype to assist engineering neural networks for safety-critical domains. 
+nn-dependability-kit is a research prototype to assist engineering neural networks for safety-critical domains. 
 
 > C.-H. Cheng, C.-H. Huang, and G. Nührenberg. *nn-dependability-kit: Engineering Neural Networks for Safety-Critical Systems*.
 https://arxiv.org/abs/1811.06746
@@ -20,6 +20,7 @@ Examples are presented as jupyter notebooks to allow step-by-step understanding 
 ## Structure
 
 There are four packages under nndependability, namely
+- basic: reader for models as well as intermediate representation of nn (for verification purposes)
 - metrics: compute dependability metrics for neural networks
 - atg: automatic test case generation to improve the metrics
 - formal: formal verification (static analysis, constraint solving) of neural networks
