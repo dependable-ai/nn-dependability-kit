@@ -9,6 +9,10 @@ https://arxiv.org/abs/1811.06746
 
 GNU Affero General Public License (AGPL) Version 3
 
+## Manual
+
+See nn_dependability_kit_manual.pdf
+
 ## Try the tool
 
 Examples are presented as jupyter notebooks to allow step-by-step understanding over the concepts. 
