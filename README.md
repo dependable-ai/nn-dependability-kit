@@ -11,7 +11,7 @@ GNU Affero General Public License (AGPL) Version 3
 
 ## Manual
 
-See nn_dependability_kit_manual.pdf
+See [nn_dependability_kit_manual.pdf](https://github.com/dependable-ai/nn-dependability-kit/blob/master/nn_dependability_kit_manual.pdf)
 
 ## Try the tool
 
@@ -33,7 +33,7 @@ There are four packages under nndependability, namely
 ## Important python packages as requirements
 
 - PyTorch 0.4.x + Numpy + matplotlib + jupyter
-- [Test case generation] Google optimization research tools (https://developers.google.com/optimization/introduction/installing/binary)
+- [Test case generation] [Google optimization research tools](https://developers.google.com/optimization/introduction/installing/binary)
 - [Verification / static analysis] PuLP (python-based MILP connector to CBC and other solvers)
     - [For Ubuntu users] CBC solver pre-shipped with PuLP may crash in solving some problems. Therefore, please additionally install [GNU GLPK](http://www.gnu.org/software/glpk/). The static analysis engine assumes that the GLPK solver is installed in the default directory "/usr/local/bin/glpsol". Whenever CBC crashes, GLPK is automatically triggered as a replacement.
 - [Run-time verification] dd (binary decision diagram implemented using python)
