@@ -235,7 +235,7 @@ def deriveReLuOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs,
 def deriveELuOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, bigM, minBound, maxBound, inputConstraints = [], alpha = 1.0):
     value = deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, minBound, maxBound, [], inputConstraints)
     if value < 0:
-        return alpha*(math.exp(value) - 1)
+        return alpha*(np.exp(value) - 1)
     else:    
         return value
         
@@ -243,8 +243,11 @@ def deriveBNOutputBound(isMaxBound, nout, minBound, maxBound, moving_mean, movin
     # BN in operating time is just a linear transformation. 
     # Therefore, the min and max value will be either from the original min or original max.
     
-    value1 = computeBN(minBound[nout], moving_mean, moving_variance, gamma[nout], beta[nout], epsilon)
-    value2 = computeBN(maxBound[nout], moving_mean, moving_variance, gamma[nout], beta[nout], epsilon)
+    #value1 = computeBN(minBound[nout], moving_mean[nout], moving_variance[nout], gamma[nout], beta[nout], epsilon)
+    #value2 = computeBN(maxBound[nout], moving_mean[nout], moving_variance[nout], gamma[nout], beta[nout], epsilon)
+    
+    value1 = computeBN(minBound[nout], moving_mean[nout], moving_variance[nout], gamma[nout], beta[nout], epsilon)
+    value2 = computeBN(maxBound[nout], moving_mean[nout], moving_variance[nout], gamma[nout], beta[nout], epsilon)
     
     if(isMaxBound):
         return max(value1, value2)
@@ -253,6 +256,11 @@ def deriveBNOutputBound(isMaxBound, nout, minBound, maxBound, moving_mean, movin
         
 
 def computeBN(z, moving_mean, moving_variance, gamma, beta, epsilon):
-    z_norm = (z -  moving_mean) / (math.sqrt(moving_variance + epsilon))
+    #print(z.shape)
+    #print(moving_mean)
+    #print(moving_variance)
+    #print(gamma.shape)
+    #print(beta.shape)
+    z_norm = (z -  moving_mean) / (np.sqrt(moving_variance + epsilon))
     z_tilda = (gamma * z_norm) + beta
     return z_tilda
