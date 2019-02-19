@@ -5,7 +5,7 @@ import math
 
 
 
-def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, minBound, maxBound, octagonBound = [], inputConstraints = []):
+def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, minBound, maxBound, octagonBound = [], inputConstraints = [], isUsingCplex = False):
     """Derive the min or max output of a neuron using boxed domain and MILP, where the neuron is a linear function.
 
     This is based on a partial re-implementation of the ATVA'17 paper https://arxiv.org/pdf/1705.01040.pdf.
@@ -88,11 +88,14 @@ def deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInput
         else:
             prob.writeLP("bound_nout_min_"+str(layerIndex)+"_"+str(nout)+".lp")
 
-    # Solve the problem using the default solver (CBC)
-    try:
-        prob.solve()
-    except: 
-        prob.solve(GLPK("/usr/local/bin/glpsol", options=["--cbg"]))
+    if(isUsingCplex == False):
+        # Solve the problem using the default solver (CBC)
+        try:
+            prob.solve()
+        except: 
+            prob.solve(GLPK("/usr/local/bin/glpsol", options=["--cbg"]))
+    else:
+        prob.solve(CPLEX())
 
     if prob.status == 1:
         return value(prob.objective)
@@ -121,7 +124,7 @@ def printSolverStatus():
     print("#LpStatusUndefined	“Undefined”	-3")
 
     
-def isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfOutputs, minBound, maxBound, octagonBound = [], riskProperty = []):
+def isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfOutputs, minBound, maxBound, octagonBound = [], riskProperty = [], isUsingCplex = False):
     """Compute if a certain risk property associated with a certain neuron layer is reachable.
 
     This is based on a partial re-implementation of the ATVA'17 paper https://arxiv.org/pdf/1705.01040.pdf.
@@ -205,11 +208,14 @@ def isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfO
         
     # Solve the problem using the default solver (CBC)
     # Solve the problem using the default solver (CBC)
-    try:
-        prob.solve()
-    except: 
-        prob.solve(GLPK("/usr/local/bin/glpsol", options=["--cbg"]))
-
+    if(isUsingCplex == False):
+        # Solve the problem using the default solver (CBC)
+        try:
+            prob.solve()
+        except: 
+            prob.solve(GLPK("/usr/local/bin/glpsol", options=["--cbg"]))
+    else:
+        prob.solve(CPLEX())
     
     # Print the status of the solved LP
     print("==============================")
@@ -225,14 +231,14 @@ def isRiskPropertyReachable(layerIndex, weights, bias, numberOfInputs, numberOfO
     else:
         return True
 
-def deriveReLuOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, bigM, minBound, maxBound, inputConstraints = [], octagonBound = []):
+def deriveReLuOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, bigM, minBound, maxBound, inputConstraints = [], octagonBound = [], isUsingCplex = False):
     value = deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, minBound, maxBound, octagonBound, inputConstraints)
     if value < 0:
         return 0
     else:    
         return value
         
-def deriveELuOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, bigM, minBound, maxBound, inputConstraints = [], alpha = 1.0):
+def deriveELuOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, bigM, minBound, maxBound, inputConstraints = [], alpha = 1.0, isUsingCplex = False):
     value = deriveLinearOutputBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout, minBound, maxBound, [], inputConstraints)
     if value < 0:
         return alpha*(np.exp(value) - 1)

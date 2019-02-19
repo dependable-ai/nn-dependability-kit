@@ -2,7 +2,7 @@
 from pulp import *
 import math
 
-def deriveReLuOutputOctagonBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout1, nout2, bigM, minBound, maxBound, octagonBound, isDifference, inputConstraints = [], seconds = 5):
+def deriveReLuOutputOctagonBound(isMaxBound, layerIndex, weights, bias, numberOfInputs, nout1, nout2, bigM, minBound, maxBound, octagonBound, isDifference, inputConstraints = [], seconds = 5, isUsingCplex = False):
     """Derive the output difference bound for two neurons nout1 and nout2.
 
     This is based on a partial re-implementation of the ATVA'17 paper https://arxiv.org/pdf/1705.01040.pdf.
@@ -120,11 +120,14 @@ def deriveReLuOutputOctagonBound(isMaxBound, layerIndex, weights, bias, numberOf
 
     
     # prob.writeLP("test.lp")
-    # Solve the problem using the default solver (CBC)
-    try:
-        prob.solve()
-    except: 
-        prob.solve(GLPK("/usr/bin/glpsol", options=["--cbg"]))
+    if(isUsingCplex == False):
+        # Solve the problem using the default solver (CBC)
+        try:
+            prob.solve()
+        except: 
+            prob.solve(GLPK("/usr/local/bin/glpsol", options=["--cbg"]))
+    else:
+        prob.solve(CPLEX())
     
     if prob.status == 1:
         return value(prob.objective)
