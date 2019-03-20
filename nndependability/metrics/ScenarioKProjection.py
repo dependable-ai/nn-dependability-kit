@@ -52,6 +52,9 @@ class Scenario_KProjection_Metric():
             scenario = [-1] * len(self.sd.operatingConditionCriteria)
             for subchild in child:
                 operatingCondition = subchild.tag
+                if(operatingCondition == "data_source"):
+                    continue
+                    
                 value = subchild.text.strip()
                 scenario[self.sd.operatingConditionCriteria.index(operatingCondition)] = self.sd.operatingConditionItems[operatingCondition].index(value)            
             allScenarios.append(scenario)
