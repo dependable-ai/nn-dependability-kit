@@ -200,7 +200,10 @@ def verify(inputMinBound, inputMaxBound, net, inputConstraints = [], riskPropert
 
         
     # Objective
-    prob += variableDict["v_"+str(len(net.layers))+"_"+str(indexOutputNeuron)], "obj"
+    if len(riskProperty) != 0 :
+        prob += 1, "obj"
+    else:
+        prob += variableDict["v_"+str(len(net.layers))+"_"+str(indexOutputNeuron)], "obj"
     
 
     prob.writeLP("fv_"+str(layerIndex)+"_"+str(indexOutputNeuron)+".lp")
