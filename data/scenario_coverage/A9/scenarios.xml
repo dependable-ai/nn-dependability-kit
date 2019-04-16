@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenarios>
+<scenario>
+  <data_source>videos/batch1/cutMOVI0004.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>straight</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+
+<scenario>
+  <data_source>videos/batch1/cutMOVI0004.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>strong_left</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch1/cutMOVI0004.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>strong_right</straight_curvy>
+    <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch1/cutMOVI0004.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>left</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch1/cutMOVI0004.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>right</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+
+<scenario>
+  <data_source>videos/batch1/cutMOVI0004.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>3</total_lanes>
+  <current_lane>3</current_lane>
+  <straight_curvy>straight</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+
+<!-- Another video -->
+
+<scenario>
+  <data_source>videos/batch1/cutMOVI0006.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>straight</straight_curvy>
+    <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch1/cutMOVI0006.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>strong_left</straight_curvy>
+    <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch1/cutMOVI0006.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>strong_right</straight_curvy>
+    <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch1/cutMOVI0006.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>left</straight_curvy>
+    <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch1/cutMOVI0006.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>right</straight_curvy>
+    <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch1/cutMOVI0006.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>3</total_lanes>
+  <current_lane>3</current_lane>
+  <straight_curvy>straight</straight_curvy>
+    <road_surface> wet</road_surface>
+</scenario>
+
+
+<!-- Another video -->
+
+<scenario>
+  <data_source>videos/batch2/cutMOVI0001.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>straight</straight_curvy>
+  <road_surface> dry</road_surface>
+</scenario>
+
+<scenario>
+  <data_source>videos/batch2/cutMOVI0001.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>strong_left</straight_curvy>
+  <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch2/cutMOVI0001.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>strong_right</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch2/cutMOVI0001.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>left</straight_curvy>
+  <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch2/cutMOVI0001.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>right</straight_curvy>
+  <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch2/cutMOVI0001.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>3</total_lanes>
+  <current_lane>3</current_lane>
+  <straight_curvy>straight</straight_curvy>
+  <road_surface> dry</road_surface>
+</scenario>
+
+
+<!-- Another video -->
+
+<scenario>
+  <data_source>videos/batch2/cutMOVI0002.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>straight</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch2/cutMOVI0002.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>strong_left</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch2/cutMOVI0002.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>strong_right</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch2/cutMOVI0002.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>left</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch2/cutMOVI0002.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>right</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch2/cutMOVI0002.mov</data_source>
+  <weather>sunny</weather>
+  <day>day</day>
+  <total_lanes>3</total_lanes>
+  <current_lane>3</current_lane>
+  <straight_curvy>straight</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+
+
+<!-- Another video -->
+
+<scenario>
+  <data_source>videos/batch3/cut004.mov</data_source>
+  <weather>rainy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>straight</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+
+<scenario>
+  <data_source>videos/batch3/cut004.mov</data_source>
+  <weather>rainy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>strong_left</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut004.mov</data_source>
+  <weather>rainy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>strong_right</straight_curvy>
+    <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut004.mov</data_source>
+  <weather>rainy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>left</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut004.mov</data_source>
+  <weather>rainy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>right</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut004.mov</data_source>
+  <weather>rainy</weather>
+  <day>day</day>
+  <total_lanes>3</total_lanes>
+  <current_lane>3</current_lane>
+  <straight_curvy>straight</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+
+<!-- Another video -->
+
+
+<scenario>
+  <data_source>videos/batch3/cut005.mov</data_source>
+  <weather>sunny_with_rain</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>straight</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+
+<scenario>
+  <data_source>videos/batch3/cut005.mov</data_source>
+  <weather>sunny_with_rain</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>strong_left</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut005.mov</data_source>
+  <weather>sunny_with_rain</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>strong_right</straight_curvy>
+    <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut005.mov</data_source>
+  <weather>sunny_with_rain</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>left</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut005.mov</data_source>
+  <weather>sunny_with_rain</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>right</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut005.mov</data_source>
+  <weather>sunny_with_rain</weather>
+  <day>day</day>
+  <total_lanes>3</total_lanes>
+  <current_lane>3</current_lane>
+  <straight_curvy>straight</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+
+
+
+<!-- Another video -->
+
+
+<scenario>
+  <data_source>videos/batch3/cut007.mov</data_source>
+  <weather>rainy</weather>
+  <day>night</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>straight</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+
+<scenario>
+  <data_source>videos/batch3/cut007.mov</data_source>
+  <weather>rainy</weather>
+  <day>night</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>strong_left</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut007.mov</data_source>
+  <weather>rainy</weather>
+  <day>night</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>strong_right</straight_curvy>
+    <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut007.mov</data_source>
+  <weather>rainy</weather>
+  <day>night</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>left</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut007.mov</data_source>
+  <weather>rainy</weather>
+  <day>night</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>right</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut007.mov</data_source>
+  <weather>rainy</weather>
+  <day>night</day>
+  <total_lanes>3</total_lanes>
+  <current_lane>3</current_lane>
+  <straight_curvy>straight</straight_curvy>
+  <road_surface> wet</road_surface>
+</scenario>
+
+<!-- Another video -->
+
+<scenario>
+  <data_source>videos/batch3/cut0011.mov</data_source>
+  <weather>cloudy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>straight</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut0011.mov</data_source>
+  <weather>cloudy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>strong_left</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut0011.mov</data_source>
+  <weather>cloudy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>strong_right</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut0011.mov</data_source>
+  <weather>cloudy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>left</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut0011.mov</data_source>
+  <weather>cloudy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>right</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut0011.mov</data_source>
+  <weather>cloudy</weather>
+  <day>day</day>
+  <total_lanes>3</total_lanes>
+  <current_lane>3</current_lane>
+  <straight_curvy>straight</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+
+
+<!-- Another video -->
+
+<scenario>
+  <data_source>videos/batch3/cut0010.mov</data_source>
+  <weather>cloudy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>straight</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut0010.mov</data_source>
+  <weather>cloudy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>strong_left</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut0010.mov</data_source>
+  <weather>cloudy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>strong_right</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut0010.mov</data_source>
+  <weather>cloudy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>left</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut0010.mov</data_source>
+  <weather>cloudy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>right</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+<scenario>
+  <data_source>videos/batch3/cut0010.mov</data_source>
+  <weather>cloudy</weather>
+  <day>day</day>
+  <total_lanes>3</total_lanes>
+  <current_lane>3</current_lane>
+  <straight_curvy>straight</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+
+<!-- Suggested to be added by the solver, in order to complete the 2 k-projection coverage -->
+
+<!--
+<scenario>
+  <weather>cloudy</weather>
+  <day>night</day>
+  <total_lanes>3</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>straight</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+
+<scenario>
+  <weather>sunny_with_rain</weather>
+  <day>day</day>
+  <total_lanes>3</total_lanes>
+  <current_lane>2</current_lane>
+  <straight_curvy>straight</straight_curvy>
+    <road_surface> dry</road_surface>
+</scenario>
+
+<scenario>
+  <weather>cloudy</weather>
+  <day>day</day>
+  <total_lanes>3</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>straight</straight_curvy>
+    <road_surface> wet</road_surface>
+</scenario>
+
+<scenario>
+  <weather>rainy</weather>
+  <day>day</day>
+  <total_lanes>2</total_lanes>
+  <current_lane>1</current_lane>
+  <straight_curvy>straight</straight_curvy>
+  <road_surface> dry</road_surface>
+</scenario>
+
+--> 
+
+</scenarios>
+
+
+

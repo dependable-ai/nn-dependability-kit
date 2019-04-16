@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<discrete-scenario-description>
+  <weather>cloudy, rainy, sunny, sunny_with_rain, snowy</weather>
+  <day>day, night</day>
+  <total_lanes>1, 2, 3</total_lanes>
+  <current_lane>1, 2, 3</current_lane>
+  <straight_curvy>strong_left, left, straight, right, strong_right</straight_curvy>
+  <road_surface> dry, wet</road_surface>
+</discrete-scenario-description>

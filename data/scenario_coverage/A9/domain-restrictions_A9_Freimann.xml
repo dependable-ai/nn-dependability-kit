@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<constraints>
+<!-- This file stores all constraints that are not possible to be realized in the A9_Schwabing_Freimann route -->
+
+    <!-- C1. Due to weather conditions, we are not able to collect any snowy condition anymore -->
+    <constraint>
+        <upperbound>0</upperbound>
+        <lowerbound>0</lowerbound>
+        <item>1, weather.snowy</item>
+    </constraint>
+
+ 
+    
+    <!-- C2. If it is at night, it can not be "sunny" and "sunny_with_rain" -->
+        <!-- C2.1 day.night + weather.sunny <= 1 (when it sums to 2, it means that both are true) -->
+        <constraint>
+            <upperbound>1</upperbound>
+            <lowerbound>0</lowerbound>
+            <item>1, day.night</item>
+            <item>1, weather.sunny</item>
+        </constraint>   
+        <!-- C2.2 day.night + weather.sunny_with_rain <= 1 (when it sums to 2, it means that both are true) -->
+        <constraint>
+            <upperbound>1</upperbound>
+            <lowerbound>0</lowerbound>
+            <item>1, day.night</item>
+            <item>1, weather.sunny_with_rain</item>
+        </constraint>   
+
+    <!-- C3. If the total lane is 1, then we can only have current lane to be 1 -->
+    <!-- C3.1 total_lanes.1 + current_lane.2 <= 1 (when it sums to 2, it means that both are true) -->
+    <constraint>
+        <upperbound>1</upperbound>
+        <lowerbound>0</lowerbound>
+        <item>1, total_lanes.1</item>
+        <item>1, current_lane.2</item>
+    </constraint> 
+    <!-- C3.1 total_lanes.1 + current_lane.3 <= 1 (when it sums to 2, it means that both are true) -->    
+    <constraint>
+        <upperbound>1</upperbound>
+        <lowerbound>0</lowerbound>
+        <item>1, total_lanes.1</item>
+        <item>1, current_lane.3</item>
+    </constraint>   
+
+
+    <!-- C4. In A9_Schwabing_Freimann, we don't have number of lanes to be 1 -->
+
+    <constraint>
+        <upperbound>0</upperbound>
+        <lowerbound>0</lowerbound>
+        <item>1, total_lanes.1</item>
+    </constraint>   
+
+    <!-- C5. In A9_Schwabing_Freimann, if the number of lanes is 3, we can't have it bending -->
+
+    <constraint>
+        <upperbound>1</upperbound>
+        <lowerbound>0</lowerbound>
+        <item>1, total_lanes.3</item>
+        <item>1, straight_curvy.left</item>
+    </constraint>   
+    <constraint>
+        <upperbound>1</upperbound>
+        <lowerbound>0</lowerbound>
+        <item>1, total_lanes.3</item>
+        <item>1, straight_curvy.strong_left</item>
+    </constraint>   
+    <constraint>
+        <upperbound>1</upperbound>
+        <lowerbound>0</lowerbound>
+        <item>1, total_lanes.3</item>
+        <item>1, straight_curvy.right</item>
+    </constraint>   
+    <constraint>
+        <upperbound>1</upperbound>
+        <lowerbound>0</lowerbound>
+        <item>1, total_lanes.3</item>
+        <item>1, straight_curvy.strong_right</item>
+    </constraint>   
+
+    <!-- C6. If the total lane is 2, then we can only have current lane to be 1 or 2 -->
+    <!-- C3.1 total_lanes.2 + current_lane.3 <= 1 (when it sums to 2, it means that both are true) -->
+    <constraint>
+        <upperbound>1</upperbound>
+        <lowerbound>0</lowerbound>
+        <item>1, total_lanes.2</item>
+        <item>1, current_lane.3</item>
+    </constraint> 
+     
+     
+     
+</constraints>
+
