@@ -1,3 +1,4 @@
+import os
 import numpy as np 
 import scipy
 import math
@@ -82,6 +83,8 @@ class Scenario_KProjection_Metric():
         newScenario = ET.tostring(top, "utf-8")
         reparsed = minidom.parseString(newScenario)
         #print(reparsed.toprettyxml(indent="  "))
+        if os.path.dirname(outputFile):
+            os.makedirs(os.path.dirname(outputFile), exist_ok=True)
         secnarioFile = open(outputFile, "w")
         secnarioFile.write(reparsed.toprettyxml(indent="  "))
         secnarioFile.close()
