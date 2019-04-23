@@ -7,7 +7,7 @@
 
 \title{\textsf{nn-dependability-kit} manual \\ \begin{large}(Public version)\end{large}}
 
-\date{February 13th, 2019}
+\date{April 23th, 2019}
 
 \usepackage{natbib}
 \usepackage{graphicx}
@@ -33,20 +33,28 @@ The online version of the tool is publicly released under the GNU Affero General
 
 \section{Dependencies and Installation}
 
-Here we list dependencies of $\textsf{nn-dependability-kit}$:
+Here we list some important dependencies of $\textsf{nn-dependability-kit}$\footnote{Users can simply use Requirements.txt to install dependencies to run most of the notebooks (excluding Tensorflow).}:
+
+
 \begin{description}
 \item[(Basics)] \texttt{PyTorch} + \texttt{Numpy} + \texttt{matplotlib} + \texttt{jupyter}. 
 \item[(Test case generation)] Google optimization research tools, available at \\ {\small\url{https://developers.google.com/optimization/introduction/installing/binary}}
 
 \item[(Verification / static analysis)] \texttt{PuLP} (python-based MILP connector to Coin-or branch and cut (CBC) solver and other solvers)
 \begin{itemize}
-    \item For Ubuntu users, the CBC solver shipped with PuLP may crash in solving some problems. Therefore, please additionally install GNU GLPK. The static analysis engine assumes that the GLPK solver is installed in the default directory "\texttt{/usr/local/bin/glpsol}". Whenever CBC solver crashes, GLPK solver is automatically triggered as a replacement.
+    \item The CBC solver shipped with PuLP may crash in solving some problems. Therefore, please additionally install GNU GLPK. The static analysis engine assumes that the GLPK solver can be called anywhere with PATH variable properly set. Whenever CBC solver crashes, GLPK solver is automatically triggered as a replacement.
+    \begin{description}
+    	\item[Ubuntu] \url{http://www.gnu.org/software/glpk/}
+    	\item[Windows] \url{http://winglpk.sourceforge.net/}
+    \end{description}
+    
     \item For academic users, we strongly advise to use IBM CPLEX as the underlying solver, as academic partners can retrieve IBM CPLEX for free. For open source solvers, we have experienced multiple times unexpected crashes. Even the above workaround cannot guarantee a crash-free behavior. 
 \end{itemize}
 \item[(Run-time verification)] \texttt{dd} (binary decision diagram implemented using python)
 \end{description}
 
 \textsf{nn-dependability-kit} mainly supports PyTorch. For TensorFlow, the support is currently restricted to formal verification. However, as the input for computing the metrics and the input for building monitors uses numpy arrays rather than native pytorch tensors, it is very easy to use these metrics or to build runtime monitors also with TensorFlow. 
+
 
 
 \section{Examples}

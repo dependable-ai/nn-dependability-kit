@@ -17,7 +17,7 @@ See [nn_dependability_kit_manual.pdf](https://github.com/dependable-ai/nn-depend
 
 Examples are presented as jupyter notebooks to allow step-by-step understanding over the concepts. 
 
-- [Metrics & test case generation] GTSRB_Neuron2ProjectionCoverage_TestGen.ipynb, or GTSRB_AdditionalMetrics.ipynb, or KITTI_Scenario_Coverage.ipynb, or MNIST_Neuron2ProjectionCoverage_TestGen.ipynb, or SSD_InterpretationPrecision.ipynb
+- [Metrics & test case generation] GTSRB_Neuron2ProjectionCoverage_TestGen.ipynb, or GTSRB_AdditionalMetrics.ipynb, or Scenario_Coverage_A9.ipynb, or KITTI_Scenario_Coverage.ipynb, or MNIST_Neuron2ProjectionCoverage_TestGen.ipynb, or SSD_InterpretationPrecision.ipynb
 - [Formal verification] TargetVehicleProcessingNetwork_FormalVerification.ipynb
 - [Runtime verification] GTSRB_RuntimeMonitoring.ipynb, or MNIST_RuntimeMonitoring.ipynb  
 
@@ -35,8 +35,13 @@ There are four packages under nndependability, namely
 - PyTorch + Numpy + matplotlib + jupyter
 - [Test case generation] [Google optimization research tools](https://developers.google.com/optimization/introduction/installing/binary)
 - [Verification / static analysis] PuLP (python-based MILP connector to CBC and other solvers)
-    - [For Ubuntu users] CBC solver pre-shipped with PuLP may crash in solving some problems. Therefore, please additionally install [GNU GLPK](http://www.gnu.org/software/glpk/). The static analysis engine assumes that the GLPK solver is installed in the default directory "/usr/local/bin/glpsol". Whenever CBC crashes, GLPK is automatically triggered as a replacement. Unfortunately, this can't guarantee that both two solvers won't crash at the same time. Therefore, for industrial usage we strongly advise to use IBM CPLEX as the underlying MILP solver. 
+    - CBC solver pre-shipped with PuLP may crash in solving some problems. The static analysis engine assumes that the GLPK solver can be called (please set up PATH variable), such that whenever CBC crashes, GLPK is automatically triggered as a replacement. Unfortunately, this can't guarantee that both two solvers won't crash at the same time. Therefore, for industrial usage we strongly advise to use IBM CPLEX as the underlying MILP solver. 
+		- [GNU GLPK] http://www.gnu.org/software/glpk/
+		- [GPLK on Windows] http://winglpk.sourceforge.net/
+
 - [Run-time verification] dd (binary decision diagram implemented using python)
+
+Use Requirements.txt to install dependencies to run most of the notebooks (excluding Tensorflow).
 
 ## Related publications
 
