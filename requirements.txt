@@ -1,7 +1,7 @@
 astutils==0.0.3
 attrs==19.1.0
 backcall==0.1.0
-bleach==3.1.0
+bleach==3.3.0
 colorama==0.4.1
 cycler==0.10.0
 dd==0.5.4
