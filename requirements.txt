@@ -39,7 +39,7 @@ ply==3.10
 prometheus-client==0.6.0
 prompt-toolkit==2.0.9
 protobuf==3.7.1
-psutil==5.6.1
+psutil==5.6.6
 PuLP==1.6.9
 pydot==1.4.1
 Pygments==2.3.1
